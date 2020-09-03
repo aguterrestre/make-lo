@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <!-- /.row -->
+    <div class="row">
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{ card_news_client_num|length }}</h3>
+
+              <p>Nuevos clientes</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <a href="{{ card_news_client_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{ card_news_ticket_num|length }}</h3>
+
+              <p>Ventas de hoy</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <a href="{{ card_news_ticket_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>${{ card_money_ticket_num }}</h3>
+
+              <p>Ingresos de hoy</p>
+            </div>
+
+            <div class="icon">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <!--<a href="#" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>-->
+            <a class="small-box-footer"><i class="fas"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-danger">
+            <div class="inner">
+              <h3>{{ card_low_product_stock_num|length }}</h3>
+
+              <p>Productos con bajo stock</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <a href="{{ card_low_product_stock_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <h3>{{ card_product_to_expire_num }}</h3>
+
+            <p>Productos por vencer</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <a href="{{ card_product_to_expire_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <h3>{{ card_product_expire_num|length }}</h3>
+
+            <p>Productos vencidos</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <a href="{{ card_product_expire_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+    </div>    
+{% endblock %}

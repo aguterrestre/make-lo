@@ -1,0 +1,59 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+    <script src="{% static 'ticket/js/list-ticket.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+  <tr>
+      <th scope="col" style="width: 5%;">Código</th>
+      <th scope="col" style="width: 30%;">Cliente</th>
+      <th scope="col" style="width: 15%;">Número</th>
+      <th scope="col" style="width: 10%;">Fecha</th>
+      <th scope="col" style="width: 15%;">Total</th>
+      <th scope="col" style="width: 5%;">Opciones</th>
+  </tr>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block buttons_list %}
+    <a href="{{ ticket_report_url }}" class="btn btn-success btn-flat">
+        <i class="fas fa-chart-bar"></i> Reporte de Venta
+    </a>
+{% endblock %}
+
+{% block javascript %}
+  <!-- Ventana modal para ver detalle de venta -->
+  <div class="modal fade" id="modal_ticket_detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel"><b>
+                    <i class="fas fa-shopping-cart"></i> Detalle de venta</b>
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <table class="table table-bordered" id="table_ticket_detail">
+                      <thead>
+                      <tr>
+                          <th>Producto</th>
+                          <th>Precio</th>
+                          <th>Cantidad</th>
+                          <th>Subtotal</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head %}
+    {% block head_form %}
+        <!--
+          <!-- Plugins para campo fecha -->
+          <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+          <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+          <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+          <!-- JS para plugins -->
+          <!--<script src="{% static 'js/date-form.js' %}"></script>-->
+        -->
+    {% endblock %}
+{% endblock %}
+{% block content %}
+    <form method="post" action="." enctype="multipart/form-data">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                <!--Muestra los errores al aceptar el formulario-->
+                <!--{{ form.errors }}-->
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label for="email">{{ field.label }}:</label>
+                        {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success btn-flat">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-secondary btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+    <script>
+        {% if form.errors %}
+            var errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ field.label }}: ' + '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                errors += '{{ field.label }}: ' + '{{ error }}\n';
+            {% endfor %}
+            Swal.fire({
+                title: 'Oops...!',
+                text: errors,
+                icon: 'warning',
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'Aceptar'
+            });
+        {% endif %}
+    </script>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% load static %}
+<aside class="main-sidebar sidebar-light-primary elevation-4">
+    <a href="#" class="brand-link">
+        <img src="{{ company.get_photo_image_sidebar }}"
+             alt="logo-sidebar"
+             class="img-size-64"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light"><b>{{ company }}</b></span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <li class="nav-item">
+                  <a href="{% url 'sale:ticket_list' %}" class="nav-link">
+                      <i class="nav-icon fas fa-shopping-cart"></i>
+                      <p>
+                          Ventas
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'sale:client_list' %}" class="nav-link">
+                      <i class="nav-icon fas fa-users"></i>
+                      <p>
+                          Clientes
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'stock:product_list' %}" class="nav-link">
+                      <i class="nav-icon fas fa-boxes"></i>
+                      <p>
+                          Productos
+                      </p>
+                  </a>
+              </li>
+              <!--
+              <li class="nav-item">
+                  <a href="#" class="nav-link">
+                      <i class="nav-icon fas fa-user-friends"></i>
+                      <p>
+                          Proveedores
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="#" class="nav-link">
+                      <i class="nav-icon fas fa-cash-register"></i>
+                      <p>
+                          Dinero
+                      </p>
+                  </a>
+              </li>
+              -->
+            </ul>
+        </nav>
+    </div>
+</aside>

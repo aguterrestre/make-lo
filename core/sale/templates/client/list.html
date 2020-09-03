@@ -1,0 +1,62 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block columns %}
+  <tr>
+      <th scope="col" style="width: 10%;">Código</th>
+      <th scope="col" style="width: 15%;">Nombre</th>
+      <th scope="col" style="width: 15%;">Apellido</th>
+      <th scope="col" style="width: 10%;">Documento</th>
+      <th scope="col" style="width: 15%;">Fecha de nacimiento</th>
+      <th scope="col" style="width: 15%;">Dirección</th>
+      <!--<th scope="col" style="width: 15%;">Sexo</th>-->
+      <th scope="col" style="width: 15%;">Teléfono</th>
+      <th scope="col" style="width: 20%;">Opciones</th>
+  </tr>
+{% endblock %}
+
+{% block rows %}
+  {% for client in object_list %}
+    <tr>
+      <td>{{ client.id }}</td>
+      <td>{{ client.name }}</td>
+      <td>{{ client.surname }}</td>
+      <td>{{ client.document }}</td>
+      <td>{{ client.date_birthday }}</td>
+      <td>{{ client.address }}</td>
+      <!--<td>{{ c.get_gender_display }}</td>-->
+      <td>{{ client.telephone }}</td>
+      <td>
+        <a href="{% url 'sale:client_update' client.id %}" class="btn btn-warning btn-xs btn-flat"
+        style="color: white;">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a href="{% url 'sale:client_delete' client.id %}" class="btn btn-danger btn-xs btn-flat">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+{% endblock %}
+
+{% block buttons_list %}
+    <a href="{{ client_report_url }}" class="btn btn-success btn-flat">
+        <i class="fas fa-chart-bar"></i> Reporte de Cliente
+    </a>
+{% endblock %}
+
+{% block javascript %}
+  <!-- DataTable 1.10.20 -->
+  <script type="application/javascript">
+    $(document).ready( function () {
+      $('#table_id').DataTable({
+        responsive: true,
+        autoWidth: false,
+        "language": {
+            url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'
+        },
+        "lengthMenu": [ 5, 10, 15, 20 ]
+      });
+    } );
+  </script>
+{% endblock %}

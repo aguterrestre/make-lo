@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <form method="post" action="." enctype="multipart/form-data">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-trash"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="{{ action }}">
+                <div class="alert alert-danger alert-dismissible">
+                    <h5><i class="icon fas fa-ban"></i>Atención!</h5>
+                    ¿Estas seguro de eliminar {{ detail }} {{ object }}?
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success btn-flat">
+                    <i class="fas fa-save"></i> Si, aceptar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-secondary btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            // evento submit del boton eliminar
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+                var parameters = new FormData();
+                parameters.append('action', $('input[name="action"]').val());
+                submit_delete_with_ajax(window.location.pathname, parameters, function (response) {
+                    location.href = '{{ list_url }}';
+                });
+            });
+        });
+    </script>
+{% endblock %}

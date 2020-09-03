@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+
+  {% block head_list %}
+
+  {% endblock %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="card card-success">
+      <div class="card-header">
+          <h3 class="card-title">
+              <i class="fas fa-search"></i>
+              {{ title }}
+          </h3>
+      </div>
+      <div class="card-body">
+          <table class="table" id="table_id">
+              <thead>
+              {% block columns %}
+
+              {% endblock %}
+              </thead>
+              <tbody>
+              {% block rows %}
+
+              {% endblock %}
+              </tbody>
+          </table>
+      </div>
+      <div class="card-footer">
+        <a href="{{ create_url }}" class="btn btn-success btn-flat">
+            <i class="fas fa-plus"></i> {{ btn_new_detail }}
+        </a>
+          {% block buttons_list %}
+
+          {% endblock %}
+      </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}
