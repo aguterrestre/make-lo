@@ -53,3 +53,15 @@ class ProviderReportForm(Form):
         'style': 'width: 100%',
         'autocomplete': 'off'
     }))
+
+
+class InvoiceReportForm(Form):
+    date_joined_range = CharField(widget=TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
+    provider = ChoiceField(widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%',
+        'autocomplete': 'off'
+    }))

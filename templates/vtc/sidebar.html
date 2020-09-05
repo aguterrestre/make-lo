@@ -12,7 +12,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <li class="nav-item">
                   <a href="{% url 'sale:ticket_list' %}" class="nav-link">
-                      <i class="nav-icon fas fa-shopping-cart"></i>
+                      <i class="nav-icon fas fa-store-alt"></i>
                       <p>
                           Ventas
                       </p>
@@ -39,6 +39,14 @@
                       <i class="nav-icon fas fa-user-friends"></i>
                       <p>
                           Proveedores
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'purchase:invoice_list' %}" class="nav-link">
+                      <i class="nav-icon fas fa-shopping-cart"></i>
+                      <p>
+                          Compras
                       </p>
                   </a>
               </li>
