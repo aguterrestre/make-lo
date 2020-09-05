@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'core.stock',
     'core.report',
     'core.setting',
+    'core.purchase',
     # django tweaks
     'widget_tweaks',
 ]
