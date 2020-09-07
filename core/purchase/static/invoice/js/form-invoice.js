@@ -2,6 +2,8 @@ var tableInvoiceForm;
 var invoices = {
     items: {
         provider: 1,
+        center: 1,
+        number: 1,
         date_joined: '',
         subtotal: 0.0000,
         total_tax: 0.0000,
@@ -190,6 +192,8 @@ $(function () {
         }
 
         invoices.items.provider = $('select[name="provider"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        invoices.items.center = $('input[name="center"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        invoices.items.number = $('input[name="number"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         invoices.items.date_joined = $('input[name="date_joined"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         var parameters = new FormData(); // creamos un objeto FormData para enviarlo a nuestra vista y guardar sus datos en el modelo
         parameters.append('action', $('input[name="action"]').val()); // le agregamos un parametro para definir la accion

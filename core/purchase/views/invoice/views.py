@@ -95,11 +95,11 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
                 with transaction.atomic():
                     invoices = json.loads(request.POST['invoices'])
                     invoice = Invoice()
+                    # Completamos la cabecera del comprobante
                     invoice.provider = Provider(id=(invoices['provider']))
-                    for comp in Company.objects.filter(id=1):
-                        invoice.letter = comp.letter
-                        invoice.center = comp.center
-                        invoice.number = comp.number
+                    invoice.letter = 'c'  # por ahora cargamos comprobantes C
+                    invoice.center = invoices['center']
+                    invoice.number = invoices['number']
                     invoice.date_joined = invoices['date_joined']
                     invoice.subtotal = float(invoices['subtotal'])
                     invoice.total_tax = float(invoices['total_tax'])
@@ -108,6 +108,7 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
                     J = 0  # Para contabilizar el número de renglones al guardar el detalle del invoice
                     for i in invoices['products']:
                         J += 1
+                        # Completamos los renglones del comprobante
                         invoice_detail = Invoice_Detail()
                         invoice_detail.invoice = Invoice(id=invoice.id)
                         invoice_detail.row_numer = J
@@ -117,10 +118,6 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
                         invoice_detail.subtotal = float(i['subtotal'])
                         invoice_detail.save()
                     data = {'id': invoice.id}  # se usa imprimir el ticket
-                    # Aumentamos el numerador de ticket en la empresa
-                    company = Company.objects.get(pk=1)
-                    company.number = invoice.number + 1
-                    company.save()
                     # Aumentamos el stock de cada producto
                     for p in invoices['products']:
                         product = Product.objects.get(pk=p['id'])

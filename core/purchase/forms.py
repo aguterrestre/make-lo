@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, DateInput, Select
+from django.forms import ModelForm, TextInput, DateInput, Select, NumberInput
 from django.forms import EmailInput
 
 from datetime import datetime
@@ -76,13 +76,16 @@ class InvoiceForm(ModelForm):
 
     class Meta:
         model = Invoice
-        fields = '__all__'
+        fields = ('provider', 'voucher_type', 'center', 'number', 'date_joined', 'subtotal', 'total_tax',
+                  'total')
         widgets = {
             'provider': Select(attrs={
                 'class': 'form-control select2',
                 'style': 'width: 100%',
             }),
             'voucher_type': Select(),
+            'center': NumberInput(),
+            'number': NumberInput(),
             'date_joined': DateInput(format='%Y-%m-%d',
                                      attrs={
                                             'value': datetime.now().strftime('%Y-%m-%d'),
@@ -102,6 +105,5 @@ class InvoiceForm(ModelForm):
                                         'readonly': True,
                                 })
         }
-        exclude = ['letter', 'center', 'number', 'purchase_condition',
-                   'date_creation', 'user_creation', 'user_update',
+        exclude = ['letter', 'purchase_condition', 'date_creation', 'user_creation', 'user_update',
                    'date_update']
