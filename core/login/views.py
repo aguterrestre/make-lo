@@ -8,6 +8,7 @@ from django.db.models import Sum
 from core.sale.models import Client, Ticket
 from core.stock.models import Product
 from core.setting.models import Company
+from core.purchase.models import Provider, Invoice
 
 from datetime import datetime
 
@@ -85,4 +86,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Card de productos vencidos
         context['card_product_expire_num'] = Product.objects.filter(date_expiration__lt=datetime.now())
         context['card_product_expire_url'] = reverse_lazy('stock:product_list')
+        # Card de nuevos proveedores
+        context['card_news_provider_num'] = Provider.objects.filter(date_creation__date=datetime.now())
+        context['card_news_provider_url'] = reverse_lazy('purchase:provider_list')
+        # Card de nuevas compras en el día de hoy
+        context['card_news_invoice_num'] = Invoice.objects.filter(date_creation__date=datetime.now())
+        context['card_news_invoice_url'] = reverse_lazy('purchase:invoice_list')
         return context

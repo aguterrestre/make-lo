@@ -5,7 +5,7 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-info">
+          <div class="small-box bg-success">
             <div class="inner">
               <h3>{{ card_news_client_num|length }}</h3>
 
@@ -27,7 +27,7 @@
               <p>Ventas de hoy</p>
             </div>
             <div class="icon">
-              <i class="fas fa-shopping-cart"></i>
+              <i class="fas fa-store-alt"></i>
             </div>
             <a href="{{ card_news_ticket_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
           </div>
@@ -97,5 +97,35 @@
           <a href="{{ card_product_expire_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
-    </div>    
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{ card_news_provider_num|length }}</h3>
+
+            <p>Nuevos proveedores</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <a href="{{ card_news_provider_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{ card_news_invoice_num|length }}</h3>
+
+            <p>Compras de hoy</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <a href="{{ card_news_invoice_url }}" class="small-box-footer">Más info. <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+    </div>
 {% endblock %}
