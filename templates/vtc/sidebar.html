@@ -12,7 +12,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <li class="nav-item">
-                  <a href="{% url 'sale:ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' %}active{% endif %}">
+                  <a href="{% url 'sale:ticket_list' %}" class="nav-link {% if request.resolver_match.url_name == 'ticket_list' or request.resolver_match.url_name == 'ticket_report' %}active{% endif %}">
                       <i class="nav-icon fas fa-store-alt"></i>
                       <p>
                           Ventas
@@ -20,7 +20,7 @@
                   </a>
               </li>
               <li class="nav-item">
-                  <a href="{% url 'sale:client_list' %}" class="nav-link {% if request.resolver_match.url_name == 'client_list' %}active{% endif %}">
+                  <a href="{% url 'sale:client_list' %}" class="nav-link {% if request.resolver_match.url_name == 'client_list' or request.resolver_match.url_name == 'client_report' %}active{% endif %}">
                       <i class="nav-icon fas fa-users"></i>
                       <p>
                           Clientes
@@ -28,7 +28,7 @@
                   </a>
               </li>
               <li class="nav-item">
-                  <a href="{% url 'stock:product_list' %}" class="nav-link {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+                  <a href="{% url 'stock:product_list' %}" class="nav-link {% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_report' %}active{% endif %}">
                       <i class="nav-icon fas fa-boxes"></i>
                       <p>
                           Productos
@@ -36,7 +36,7 @@
                   </a>
               </li>
               <li class="nav-item">
-                  <a href="{% url 'purchase:provider_list' %}" class="nav-link {% if request.resolver_match.url_name == 'provider_list' %}active{% endif %}">
+                  <a href="{% url 'purchase:provider_list' %}" class="nav-link {% if request.resolver_match.url_name == 'provider_list' or request.resolver_match.url_name == 'provider_report' %}active{% endif %}">
                       <i class="nav-icon fas fa-user-friends"></i>
                       <p>
                           Proveedores
@@ -44,7 +44,7 @@
                   </a>
               </li>
               <li class="nav-item">
-                  <a href="{% url 'purchase:invoice_list' %}" class="nav-link {% if request.resolver_match.url_name == 'invoice_list' %}active{% endif %}">
+                  <a href="{% url 'purchase:invoice_list' %}" class="nav-link {% if request.resolver_match.url_name == 'invoice_list' or request.resolver_match.url_name == 'invoice_report' %}active{% endif %}">
                       <i class="nav-icon fas fa-shopping-cart"></i>
                       <p>
                           Compras
