@@ -51,16 +51,14 @@
                       </p>
                   </a>
               </li>
-              <!--
               <li class="nav-item">
-                  <a href="#" class="nav-link {% if request.resolver_match.url_name == 'invoice_list' %}active{% endif %}">
+                  <a href="{% url 'money:money_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'money_dashboard' %}active{% endif %}">
                       <i class="nav-icon fas fa-cash-register"></i>
                       <p>
                           Dinero
                       </p>
                   </a>
               </li>
-              -->
             </ul>
         </nav>
     </div>

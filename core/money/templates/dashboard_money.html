@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <!-- /.row -->
+    <div class="row">
+      <div class="col-md-4 col-sm-6 col-12">
+          <div class="info-box bg-success">
+            <span class="info-box-icon"><i class="far fa-thumbs-up"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Ventas totales</span>
+              <span class="info-box-number">{{ card_money_ticket_num_total }}</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+              <span class="progress-description">
+                70% aumentó en los últimos 30 días
+              </span>
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
