@@ -15,7 +15,7 @@ var invoices = {
         // var iva = $('input[name="iva"]').val();
         $.each(this.items.products, function (pos, dict) {
             dict.pos = pos;
-            dict.subtotal = dict.quantity * parseFloat(dict.final_price);
+            dict.subtotal = dict.quantity * parseFloat(dict.purchase_price);
             subtotal += dict.subtotal;
         });
         this.items.subtotal = subtotal;
@@ -71,7 +71,7 @@ var invoices = {
                 {"data": "id"},
                 {"data": "name"},
                 {"data": "quantity"},
-                {"data": "final_price"},
+                {"data": "purchase_price"},
                 {"data": "subtotal"},
                 {"data": "options"},
             ], // las columnas que devuelve mi vista en forma de array
@@ -85,7 +85,15 @@ var invoices = {
                   }
               },
               {
-                  targets: [3, 4], // columnas precio y subtotal
+                  targets: [3], // columna precio
+                  class: 'text-center',
+                  orderable: false,
+                  render: function (data, type, row) {
+                      return '<input type="text" name="purchase_price" class="form-control form-control-sm input-sm" autocomplete="off" value="' + row.purchase_price + '">';
+                  }
+              },
+              {
+                  targets: [4], // columna subtotal
                   class: 'text-center',
                   orderable: false,
                   render: function (data, type, row) {
@@ -103,6 +111,13 @@ var invoices = {
             ],
             rowCallback(row, data, displayNum, displayIndex, dataIndex) {
                 $(row).find('input[name="quantity"]').TouchSpin({
+                    min: 0.001,
+                    max: 1000,
+                    step: 1,
+                    forcestepdivisibility: 'none',
+                    decimals: 3
+                });
+                $(row).find('input[name="purchase_price"]').TouchSpin({
                     min: 0.001,
                     max: 1000,
                     step: 1,
@@ -130,7 +145,7 @@ function formatRepo(repo) {
                         '<b>Nombre:</b> ' + repo.name + '<br>' +
                         '<b>Categoría:</b> ' + repo.categ.name + '<br>' +
                         '<b>Unid. Medida:</b> ' + repo.unit.name + '<br>' +
-                        '<b>Precio Final:</b> <span class="badge badge-warning">$' + repo.final_price + '</span>' +
+                        '<b>Precio de compra:</b> <span class="badge badge-warning">$' + repo.purchase_price + '</span>' +
                     '</p>' +
                 '</div>' +
             '</div>' +
@@ -180,7 +195,15 @@ $(function () {
             invoices.items.products[tr.row].quantity = cant;
             invoices.calculate_invoice();
             $('td:eq(4)', tableInvoiceForm.row(tr.row).node()).html('$' + invoices.items.products[tr.row].subtotal.toFixed(4));
-        });
+        })
+        // campo precio de los renglones del invoice
+        .on('change', 'input[name="purchase_price"]', function () {
+            var cant = parseFloat($(this).val());
+            var tr = tableInvoiceForm.cell($(this).closest('td, li')).index();
+            invoices.items.products[tr.row].purchase_price = cant;
+            invoices.calculate_invoice();
+            $('td:eq(4)', tableInvoiceForm.row(tr.row).node()).html('$' + invoices.items.products[tr.row].subtotal.toFixed(4));
+        });;
 
     // evento submit del boton guardar
     $('form').on('submit', function (e) {

@@ -114,14 +114,16 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
                         invoice_detail.row_numer = J
                         invoice_detail.product = Product(id=i['id'])
                         invoice_detail.quantity = float(i['quantity'])
-                        invoice_detail.final_price = float(i['final_price'])
+                        invoice_detail.final_price = float(i['purchase_price'])
                         invoice_detail.subtotal = float(i['subtotal'])
                         invoice_detail.save()
                     data = {'id': invoice.id}  # se usa imprimir el ticket
                     # Aumentamos el stock de cada producto
+                    # Actualizamos el precio de compra de cada producto
                     for p in invoices['products']:
                         product = Product.objects.get(pk=p['id'])
                         product.stock = float(product.stock) + float(p['quantity'])
+                        product.purchase_price = float(p['purchase_price'])
                         product.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'

@@ -29,6 +29,11 @@ class ProductForm(ModelForm):
                     'placeholder': 'Ingrese el código de barra',
                 }
             ),
+            'purchase_price': NumberInput(
+                attrs={
+                    'placeholder': 'Ingrese el precio de compra',
+                }
+            ),
             'final_price': NumberInput(
                 attrs={
                     'placeholder': 'Ingrese el precio final',
@@ -44,6 +49,6 @@ class ProductForm(ModelForm):
                                          # }
                                          ),
         }
-        exclude = ['purchase_price', 'sale_price', 'exception', 'discount',
+        exclude = ['sale_price', 'exception', 'discount',
                    'user_creation', 'date_creation', 'user_update',
                    'date_update', 'category', 'unit', 'tax']
