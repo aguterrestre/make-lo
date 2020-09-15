@@ -69,6 +69,7 @@ var tickets = {
                 {"data": "id"},
                 {"data": "name"},
                 {"data": "quantity"},
+                {"data": "unit.name"},
                 {"data": "final_price"},
                 {"data": "subtotal"},
                 {"data": "options"},
@@ -83,7 +84,12 @@ var tickets = {
                   }
               },
               {
-                  targets: [3, 4], // columnas precio y subtotal
+                  targets: [3], // columna medida
+                  class: 'text-center',
+                  orderable: false
+              },
+              {
+                  targets: [4, 5], // columnas precio y subtotal
                   class: 'text-center',
                   orderable: false,
                   render: function (data, type, row) {
@@ -91,7 +97,7 @@ var tickets = {
                   }
               },
               {
-                    targets: [5], // columna eliminar
+                    targets: [6], // columna eliminar
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {

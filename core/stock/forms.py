@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, NumberInput, DateInput
+from django.forms import ModelForm, TextInput, NumberInput, DateInput, Select
 from core.stock.models import Product
 
 
@@ -48,7 +48,8 @@ class ProductForm(ModelForm):
                                          #        'data-toggle': 'datetimepicker'
                                          # }
                                          ),
+            'unit': Select(),
         }
         exclude = ['sale_price', 'exception', 'discount',
                    'user_creation', 'date_creation', 'user_update',
-                   'date_update', 'category', 'unit', 'tax']
+                   'date_update', 'category', 'tax']

@@ -128,20 +128,21 @@ $(function () {
                 },
                 columns: [
                     {"data": "product.name"},
-                    {"data": "final_price"},
                     {"data": "quantity"},
+                    {"data": "product.unit.name"},
+                    {"data": "final_price"},
                     {"data": "subtotal"},
                 ],
                 columnDefs: [
                     {
-                        targets: [1, 3], // columna final_price, subtotal
+                        targets: [3, 4], // columna final_price, subtotal
                         class: 'text-center',
                         render: function (data, type, row) {
                             return '$' + parseFloat(data).toFixed(4);
                         }
                     },
                     {
-                        targets: [2], // columna quantity
+                        targets: [1], // columna quantity
                         class: 'text-center',
                         render: function (data, type, row) {
                             return parseFloat(data).toFixed(3);
