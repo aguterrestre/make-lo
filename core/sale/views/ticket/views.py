@@ -85,12 +85,30 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
             action = request.POST['action']
             if action == 'search_products':
                 data = []
-                prods = Product.objects.filter(name__icontains=request.POST['term'])[0:10]
-                for i in prods:
-                    item = i.toJSON()
-                    # item['value'] = i.name
-                    item['text'] = i.name  # parametro que recibe select2
-                    data.append(item)
+                product_weight = request.POST['term']
+                # si ingreso busqueda de 13 caracteres y es pesable
+                if len(product_weight) == 13 and product_weight[0:2] == str(20):
+                    prod = product_weight[2:6]  # obtengo id del producto
+                    prods = Product.objects.filter(id__icontains=prod)  # filtro por id del producto
+                    for i in prods:
+                        price_i = product_weight[6:10]  # obtengo la parte entera del precio del prod
+                        price_d = product_weight[10:12]  # obtengo la parte decimal del prod
+                        price = float(price_i + "." + price_d)  # armo el precio del producto
+                        quantity_prod = price / float(i.final_price)  # calculo la cantidad del prod
+                        item = i.toJSON()
+                        item['text'] = i.name  # parametro que recibe select2
+                        item['quantity'] = quantity_prod
+                        data.append(item)
+                else:
+                    prods = (Product.objects.filter(name__icontains=request.POST['term']) |
+                             Product.objects.filter(barcode__icontains=request.POST['term']) |
+                             Product.objects.filter(id__icontains=request.POST['term']))[0:10]
+                    for i in prods:
+                        item = i.toJSON()
+                        # item['value'] = i.name
+                        item['text'] = i.name  # parametro que recibe select2
+                        item['quantity'] = 1
+                        data.append(item)
             elif action == 'add':
                 with transaction.atomic():
                     tickets = json.loads(request.POST['tickets'])
@@ -153,6 +171,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
         context['list_url'] = self.success_url
         context['dashboard_url'] = reverse_lazy('login:dashboard')
         context['action'] = 'add'
+        context['sidebar'] = 'sidebar-collapse'
         return context
 
 

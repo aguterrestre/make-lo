@@ -21,12 +21,11 @@ var tickets = {
         this.items.total = this.items.subtotal; // + this.items.iva;
 
         $('input[name="subtotal"]').val(this.items.subtotal.toFixed(4));
-        // $('input[name="ivacalc"]').val(this.items.iva.toFixed(2));
         $('input[name="total"]').val(this.items.total.toFixed(4));
     },
     add: function (item) {
         this.items.products.push(item); // agregamos a la estructura el producto elegido
-        this.list(); // llamamos al metodo list de la esta estructura
+        this.list(); // llamamos al metodo list de la estructura
     },
     list: function () {
         this.calculate_ticket();
@@ -76,6 +75,9 @@ var tickets = {
             ], // las columnas que devuelve mi vista en forma de array
             columnDefs: [
               {
+                  targets: [1], // columna nombre
+                  orderable: false
+              },              {
                   targets: [2], // columna cantidad
                   class: 'text-center',
                   orderable: false,
@@ -217,12 +219,11 @@ $(function () {
         })
         // campo cantidad de los renglones del ticket
         .on('change', 'input[name="quantity"]', function () {
-            console.clear();
             var cant = parseFloat($(this).val());
             var tr = tableTicketForm.cell($(this).closest('td, li')).index();
             tickets.items.products[tr.row].quantity = cant;
             tickets.calculate_ticket();
-            $('td:eq(4)', tableTicketForm.row(tr.row).node()).html('$' + tickets.items.products[tr.row].subtotal.toFixed(4));
+            $('td:eq(5)', tableTicketForm.row(tr.row).node()).html('$' + tickets.items.products[tr.row].subtotal.toFixed(4));
         });
 
     // evento submit del boton guardar
@@ -272,12 +273,12 @@ $(function () {
                 };
             },
         },
-        placeholder: 'Ingrese una descripción',
+        placeholder: 'Ingrese una descripción, código de barra o código de producto...',
         minimumInputLength: 3,
         templateResult: formatRepo,
     }).on('select2:select', function (e) {
         var data = e.params.data;
-        data.quantity = 1;
+        data.quantity = e.params.data.quantity;
         data.subtotal = 0.00;
         data.options = '';
         tickets.add(data);
