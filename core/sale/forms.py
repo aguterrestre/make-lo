@@ -69,9 +69,6 @@ class TicketForm(ModelForm):
     """
     Clase para crear el formulario de venta. Lo usaremos para la cabecera de la venta.
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['client'].widget.attrs['autofocus'] = True
 
     class Meta:
         model = Ticket

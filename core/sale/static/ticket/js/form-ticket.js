@@ -288,4 +288,10 @@ $(function () {
     // creamos la tabla vacía
     tickets.list();
 
+    //$('select[name="search"]').focus();
+    //document.getElementById(5).focus();
+    //$("select:first").focus();
+    //$('select[name="search"]').selected();
+    document.getElementById("search_prod").focus();
+
 });
