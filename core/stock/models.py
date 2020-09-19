@@ -43,6 +43,7 @@ class Unit_Measure(models.Model):
     # id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, verbose_name='Nombre')
     fiscal_code = models.CharField(max_length=5, default='00', verbose_name='Código fiscal')
+    abbreviation = models.CharField(max_length=30, default='', blank=True, verbose_name='Abreviatura')
     description = models.TextField(blank=True, verbose_name='Información')
 
     def __str__(self):

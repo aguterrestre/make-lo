@@ -68,7 +68,7 @@ var tickets = {
                 {"data": "id"},
                 {"data": "name"},
                 {"data": "quantity"},
-                {"data": "unit.name"},
+                {"data": "unit.abbreviation"},
                 {"data": "final_price"},
                 {"data": "subtotal"},
                 {"data": "options"},
@@ -288,10 +288,7 @@ $(function () {
     // creamos la tabla vacía
     tickets.list();
 
-    //$('select[name="search"]').focus();
-    //document.getElementById(5).focus();
-    //$("select:first").focus();
-    //$('select[name="search"]').selected();
+    // hacemos foco en el buscador de productos
     document.getElementById("search_prod").focus();
 
 });
