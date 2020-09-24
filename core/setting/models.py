@@ -66,7 +66,7 @@ class Company(models.Model):
     def get_photo_image_favicon(self):
         if self.image_favicon:
             return '{}{}'.format(settings.MEDIA_URL, self.image_favicon)
-        return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
+        return '{}{}'.format(settings.STATIC_URL, 'img/favicon.ico')
 
     def get_photo_image_ticket(self):
         if self.image_ticket:
