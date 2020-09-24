@@ -81,4 +81,21 @@ class MoneyDashboardView(LoginRequiredMixin, TemplateView):
         # Card de resultados totales
         total_result = ticket_num_total - invoice_num_total
         context['card_money_total_result'] = total_result
+        # Card de ingresos por forma de pago - experimental
+        ticket_s_cond = Ticket.objects.filter(sale_condition__id=1)
+        ticket_s_cond_quan = ticket_s_cond.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+        context['card_money_ticket_sale_1condition_num'] = ticket_s_cond
+        context['card_money_ticket_sale_1condition'] = ticket_s_cond_quan
+        ticket_s_cond = Ticket.objects.filter(sale_condition__id=2)
+        ticket_s_cond_quan = ticket_s_cond.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+        context['card_money_ticket_sale_2condition_num'] = ticket_s_cond
+        context['card_money_ticket_sale_2condition'] = ticket_s_cond_quan
+        ticket_s_cond = Ticket.objects.filter(sale_condition__id=3)
+        ticket_s_cond_quan = ticket_s_cond.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+        context['card_money_ticket_sale_3condition_num'] = ticket_s_cond
+        context['card_money_ticket_sale_3condition'] = ticket_s_cond_quan
+        ticket_s_cond = Ticket.objects.filter(sale_condition__id=4)
+        ticket_s_cond_quan = ticket_s_cond.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+        context['card_money_ticket_sale_4condition_num'] = ticket_s_cond
+        context['card_money_ticket_sale_4condition'] = ticket_s_cond_quan
         return context
