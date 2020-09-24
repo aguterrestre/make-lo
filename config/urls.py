@@ -13,6 +13,7 @@ urlpatterns = [
     path('report/', include('core.report.urls')),
     path('purchase/', include('core.purchase.urls')),
     path('money/', include('core.money.urls')),
+    path('setting/', include('core.setting.urls')),
 ]
 
 # Para servir los archivos media en modo desarrollo

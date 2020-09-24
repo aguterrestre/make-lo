@@ -12,6 +12,18 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <li class="nav-item">
+                  <a href="{% url 'setting:company_update' company.id %}" class="nav-link
+                    {% if request.resolver_match.url_name == 'company_update' %}
+                      active
+                    {% endif %}">
+                      <i class="nav-icon fas fa-store"></i>
+                      <p>
+                          Datos de tu negocio
+                      </p>
+                  </a>
+              </li>
+              <h3><hr></h3>
+              <li class="nav-item">
                   <a href="{% url 'sale:ticket_list' %}"
                     class="nav-link
                     {% comment %}
