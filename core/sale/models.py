@@ -166,6 +166,10 @@ class Sale_Condition(models.Model):
     def __str__(self):
         return self.name
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        return item
+
     class Meta:
         verbose_name = 'Condición de venta'
         verbose_name_plural = 'Condiciones de ventas'

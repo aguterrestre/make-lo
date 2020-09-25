@@ -8,7 +8,7 @@ from django.db import transaction
 from django.template.loader import get_template
 from django.conf import settings
 
-from core.sale.models import Ticket, Ticket_Detail, Client
+from core.sale.models import Ticket, Ticket_Detail, Client, Sale_Condition
 from core.sale.forms import TicketForm
 
 from core.stock.models import Product
@@ -121,6 +121,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         ticket.center = comp.center
                         ticket.number = comp.number
                     ticket.date_joined = tickets['date_joined']
+                    ticket.sale_condition = Sale_Condition(id=(tickets['sale_condition']))
                     ticket.subtotal = float(tickets['subtotal'])
                     ticket.total_tax = float(tickets['total_tax'])
                     ticket.total = float(tickets['total'])

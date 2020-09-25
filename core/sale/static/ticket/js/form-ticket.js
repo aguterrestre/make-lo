@@ -3,6 +3,7 @@ var tickets = {
     items: {
         client: 1,
         date_joined: '',
+        sale_condition: 1,
         subtotal: 0.0000,
         total_tax: 0.0000,
         total: 0.0000,
@@ -237,6 +238,7 @@ $(function () {
 
         tickets.items.client = $('select[name="client"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         tickets.items.date_joined = $('input[name="date_joined"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        tickets.items.sale_condition = $('select[name="sale_condition"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         var parameters = new FormData(); // creamos un objeto FormData para enviarlo a nuestra vista y guardar sus datos en el modelo
         parameters.append('action', $('input[name="action"]').val()); // le agregamos un parametro para definir la accion
         parameters.append('tickets', JSON.stringify(tickets.items)); // usamos metodo de JS para transformar un objeto js a un json string

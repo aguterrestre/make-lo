@@ -88,6 +88,7 @@ class TicketForm(ModelForm):
                                             'data-target': '#date_joined',
                                             'data-toggle': 'datetimepicker'
                                      }),
+            'sale_condition': Select(),
             'subtotal': DateInput(attrs={
                                         'readonly': True,
                                 }),
@@ -98,6 +99,5 @@ class TicketForm(ModelForm):
                                         'readonly': True,
                                 })
         }
-        exclude = ['letter', 'center', 'number', 'sale_condition',
-                   'date_creation', 'user_creation', 'user_update',
+        exclude = ['letter', 'center', 'number', 'date_creation', 'user_creation', 'user_update',
                    'date_update']
