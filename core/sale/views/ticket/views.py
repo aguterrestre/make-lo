@@ -105,7 +105,6 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                              Product.objects.filter(id__icontains=request.POST['term']))[0:10]
                     for i in prods:
                         item = i.toJSON()
-                        # item['value'] = i.name
                         item['text'] = i.name  # parametro que recibe select2
                         item['quantity'] = 1
                         data.append(item)
@@ -113,8 +112,6 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                 with transaction.atomic():
                     tickets = json.loads(request.POST['tickets'])
                     ticket = Ticket()
-                    # client_ticket = Client(id=(tickets['client']))
-                    # ticket.client = client_ticket.id
                     ticket.client = Client(id=(tickets['client']))
                     for comp in Company.objects.filter(id=1):
                         ticket.letter = comp.letter
