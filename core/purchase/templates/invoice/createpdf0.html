@@ -2,92 +2,80 @@
 {% load static %}
 
 <html lang="en">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>{{ title }}</title>
-    <style>
-        .img-invoice {
-            width: 100px;
-            text-align: left;
-            margin: 0 auto;
-        }
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <style>
+            .img-invoice {
+                width: 50px;
+                text-align: left;
+                margin: 0 auto;
+            }
 
-        .head {
-            text-align: left;
-            text-transform: uppercase;
-        }
+            .head {
+                text-align: left;
+                text-transform: uppercase;
+            }
 
-        .head-2 {
-            text-align: right;
-            text-transform: uppercase;
-        }
+            .head-2 {
+                text-align: right;
+                text-transform: uppercase;
+            }
 
-        #invoice thead tr th {
-            text-align: left;
-            border-bottom: 1px solid black;
-            border-top: 1px solid black;
-            padding-top: 4px;
-        }
+            #invoice thead tr th {
+                text-align: left;
+                border-bottom: 1px solid black;
+                border-top: 1px solid black;
+                padding-top: 4px;
+            }
 
-        #invoice thead tr {
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+            #invoice thead tr {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
 
-        #invoice tbody tr {
-            padding: 0;
-        }
+            #invoice tbody tr {
+                padding: 0;
+            }
 
-        .text-center{
-            text-align: center;
-        }
-    </style>
+            .text-center{
+                text-align: center;
+            }
+        </style>
+    </head>
     <body>
-      <img src="{{ company.get_photo_image_ticket }}" class="img-invoice">
+      <div>
+        <div>
+          <img src="{{ company.get_photo_image_ticket }}" class="img-invoice" alt="">
+          <div >
+            <b>{{ company.name }}</b>
+          </div>
+        </div>
+      </div>
+      <br>
       <table id="invoice">
         <tbody>
           <tr>
               <td style="width: 60%; text-align: left;">
-                <b>{{ company.name|upper }}</b><br>
-                <b>Razón Social:</b> {{ company.name|upper }}<br>
-                <b>Domicilio Comercial:</b> {{ company.address|upper }} - {{ company.residence_city }},
-                {{ company.residence_city.province.name }}, {{ company.residence_city.province.country.name }}<br>
-                <b>Condición frente al IVA:</b> {{ company.fiscal_condition.name }}<br>
+                <b>Apellido y Nombre / Razón Social:</b> {{ invoice.provider|upper }}<br>
+                <b>Domicilio:</b> {{ invoice.provider.address }} - {{ invoice.provider.residence_city }},
+                {{ invoice.provider.residence_city.province.name }},
+                {{ invoice.provider.residence_city.province.country.name }}<br>
+                <b>Condición frente al IVA:</b> {{ invoice.provider.fiscal_condition.name }}<br>
+                <b>Condición de Compra:</b> {{ invoice.purchase_condition.name }}
               </td>
               <td style="width: 30%;"></td>
               <td style="width: 60%; text-align: left;">
                 <b>FACTURA DE COMPRA</b><br>
-                <b>Punto de Venta:</b> {{ invoice }}<br>
+                <b>Comprobante:</b> {{ invoice }}<br>
                 <b>Fecha de Emisión:</b> {{ invoice.date_joined }}<br>
-                <b>CUIT:</b> {{ company.document }}<br>
-                <b>Ingresos Brutos:</b> {{ company.document_IIBB }}<br>
-                <b>Fecha de inicio de Actividades:</b> {{ company.date_activity_start }}
+                <b>CUIT:</b> {{ invoice.provider.document }}<br>
               </td>
               <td style="width: 20%;"></td>
           </tr>
         </tbody>
       </table>
-      <br>
-      <hr>
-      <table id="invoice">
-        <tbody>
-          <td style="width: 60%; text-align: left;">
-            <b>CUIT:</b> {{ invoice.provider.document }}<br>
-            <b>Condición frente al IVA:</b> {{ invoice.provider.fiscal_condition.name }}<br>
-            <b>Condición de Venta:</b> {{ invoice.purchase_condition.name }}
-          </td>
-          <td style="width: 30%;"></td>
-          <td style="width: 60%; text-align: left;">
-            <b>Apellido y Nombre / Razón Social:</b> {{ invoice.provider|upper }}<br>
-            <b>Domicilio:</b> {{ invoice.provider.address }} - {{ invoice.provider.residence_city }},
-            {{ invoice.provider.residence_city.province.name }},
-            {{ invoice.provider.residence_city.province.country.name }}<br>
-          </td>
-          <td style="width: 20%;"></td>
-        </tbody>
-      </table>
-      <hr>
       <br>
       <table id="invoice">
           <thead>
@@ -120,13 +108,6 @@
                 <td style="text-align: right">${{ invoice.total }}</td>
             </tr>
           </tbody>
-      </table>
-      <table style="margin-top: 250px;">
-          <thead>
-            <tr>
-                <th>****GRACIAS POR SU COMPRA****</th>
-            </tr>
-          </thead>
       </table>
     </body>
 </html>
