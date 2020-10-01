@@ -264,7 +264,7 @@ class Client(models.Model):
         item = model_to_dict(self)
         item['full_name'] = (f"{self.name} {self.surname}")
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
-        item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
+        # item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         item['photo'] = self.get_photo()
         item['text'] = (f"{self.name} {self.surname}")
         item['document_type'] = self.document_type.name
