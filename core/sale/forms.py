@@ -53,7 +53,8 @@ class ClientForm(ModelForm):
             ),
             'date_birthday': DateInput(format='%Y-%m-%d',
                                        attrs={
-                                            'value': datetime.now().strftime('%Y-%m-%d'),
+                                            # 'value': datetime.now().strftime('%Y-%m-%d'),
+                                            'placeholder': 'Ejemplo: 1989-02-18 (formato año-mes-día)',
                                        }
                                        ),
             'gender': Select()

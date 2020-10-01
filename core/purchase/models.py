@@ -98,7 +98,7 @@ class Provider(models.Model):
     contact_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Contacto')
     purchase_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Compra')
     telephone = models.CharField(max_length=50, default='', blank=True, verbose_name='Teléfono')
-    date_birthday = models.DateField(default=datetime.now, blank=True, verbose_name='Fecha de nacimiento')
+    date_birthday = models.DateField(null=True, blank=True, verbose_name='Fecha de nacimiento')
     user_creation = models.ForeignKey('auth.User', on_delete=models.PROTECT,
                                       related_name='provider_user_creation',
                                       blank=True, null=True, default=None)

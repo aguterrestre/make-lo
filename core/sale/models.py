@@ -235,7 +235,7 @@ class Client(models.Model):
     contact_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Contacto')
     sales_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Venta')
     telephone = models.CharField(max_length=50, default='', blank=True, verbose_name='Teléfono')
-    date_birthday = models.DateField(default=datetime.now, blank=True, verbose_name='Fecha de nacimiento')
+    date_birthday = models.DateField(null=True, blank=True, verbose_name='Fecha de nacimiento')
     user_creation = models.ForeignKey('auth.User', on_delete=models.PROTECT, related_name='user_creation',
                                       blank=True, null=True, default=None)
     date_creation = models.DateTimeField(auto_now_add=True, null=True, blank=True)
