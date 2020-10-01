@@ -27,9 +27,9 @@ class MoneyDashboardView(LoginRequiredMixin, TemplateView):
             # obtengo datos numericos del ultimo día del mes pasado
             last_month = current_date.replace(day=1)+datetime.timedelta(days=-1)
             # inicio variable del primer dia del mes anterior
-            start_date = datetime.date(last_month.year, last_month.month, 1)
+            start_date = datetime.datetime(last_month.year, last_month.month, 1)
             # inicio variable del ultimo dia del mes anterior
-            end_date = datetime.date(last_month.year, last_month.month, last_month.day)
+            end_date = datetime.datetime(last_month.year, last_month.month, last_month.day)
             # obtengo todas las ventas del mes pasado
             total_last_month = obj.objects.filter(date_creation__range=(start_date, end_date))
             # sumo los totales del mes pasado
@@ -39,9 +39,9 @@ class MoneyDashboardView(LoginRequiredMixin, TemplateView):
             # obtengo datos numericos del ultimo dia del mes actual
             cur_month = current_date.replace(month=current_date.month+1, day=1) - datetime.timedelta(days=1)
             # inicio variable del primer dia del mes actual
-            start_date = datetime.date(cur_month.year, cur_month.month, 1)
+            start_date = datetime.datetime(cur_month.year, cur_month.month, 1)
             # inicio variable del ultimo dia del mes actual
-            end_date = datetime.date(cur_month.year, cur_month.month, cur_month.day)
+            end_date = datetime.datetime(cur_month.year, cur_month.month, cur_month.day)
             # obtengo todas las ventas del mes actual
             total_current_month = obj.objects.filter(date_creation__range=(start_date, end_date))
             # sumo los totales del mes actual
