@@ -57,13 +57,13 @@ class ClientForm(ModelForm):
                                             'placeholder': 'Ejemplo: 1989-02-18 (formato año-mes-día)',
                                        }
                                        ),
-            'gender': Select()
+            'gender': Select(),
+            'document_type': Select(),
+            'fiscal_condition': Select()
         }
         exclude = ['business_name', 'trade_name', 'comercial_address',
                    'user_creation', 'date_creation', 'user_update',
-                   'date_update', 'document_type', 'fiscal_condition',
-                   'photo', 'residence_city', 'sale_condition',
-                   'status']
+                   'date_update', 'photo', 'residence_city', 'status', 'sale_condition']
 
 
 class TicketForm(ModelForm):

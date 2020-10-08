@@ -58,13 +58,13 @@ class ProviderForm(ModelForm):
                                             # 'value': datetime.now().strftime('%Y-%m-%d'),
                                             'placeholder': 'Ejemplo: 1989-02-18 (formato año-mes-día)',
                                        }
-                                       )
+                                       ),
+            'document_type': Select(),
+            'fiscal_condition': Select()
         }
         exclude = ['business_name', 'trade_name', 'comercial_address',
                    'user_creation', 'date_creation', 'user_update',
-                   'date_update', 'document_type', 'fiscal_condition',
-                   'photo', 'residence_city', 'purchase_condition',
-                   'status']
+                   'date_update', 'photo', 'residence_city', 'purchase_condition', 'status']
 
 
 class InvoiceForm(ModelForm):
