@@ -68,7 +68,8 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     var buttons = '<a rel="invoice_detail" class="btn btn-success btn-xs btn-flat" style="color: white;"><i class="fas fa-search"></i></a> ';
-                    buttons += '<a href="/purchase/invoice/pdf/add/'+row.id+'/" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a> ';
+                    buttons += '<a href="/purchase/invoice/pdf/add/' + row.id + '/" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a> ';
+                    buttons += '<a href="/purchase/invoice/del/' + row.id + '/" class="btn btn-success btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
                     return buttons;
                 }
             },

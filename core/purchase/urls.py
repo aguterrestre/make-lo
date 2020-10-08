@@ -2,6 +2,7 @@ from django.urls import path
 from core.purchase.views.provider.views import ProviderListView, ProviderCreateView
 from core.purchase.views.provider.views import ProviderUpdateView, ProviderDeleteView
 from core.purchase.views.invoice.views import InvoiceListView, InvoiceCreateView, InvoiceCreatePDFView
+from core.purchase.views.invoice.views import InvoiceDeleteView
 
 app_name = 'purchase'
 
@@ -15,4 +16,5 @@ urlpatterns = [
     path('invoice/list/', InvoiceListView.as_view(), name='invoice_list'),
     path('invoice/add/', InvoiceCreateView.as_view(), name='invoice_create'),
     path('invoice/pdf/add/<int:pk>/', InvoiceCreatePDFView.as_view(), name='invoice_create_pdf'),
+    path('invoice/del/<int:pk>/', InvoiceDeleteView.as_view(), name='invoice_delete'),
 ]
