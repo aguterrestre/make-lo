@@ -65,7 +65,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['card_news_client_num'] = Client.objects.filter(date_creation__date=datetime.now())
         context['card_news_client_url'] = reverse_lazy('sale:client_list')
         # Card de productos bajo stock
-        context['card_low_product_stock_num'] = Product.objects.filter(stock__lte=3)
+        context['card_low_product_stock_num'] = Product.objects.filter(stock__lte=3, stock__gt=0)
         context['card_low_product_stock_url'] = reverse_lazy('stock:product_list')
         # Card de nuevas ventas en el día de hoy
         context['card_news_ticket_num'] = Ticket.objects.filter(date_creation__date=datetime.now())

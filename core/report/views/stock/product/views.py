@@ -44,6 +44,8 @@ class ReportProductView(LoginRequiredMixin, TemplateView):
                     search = search.filter(stock__lte=0)
                 elif stock == 2:  # Product con stock
                     search = search.filter(stock__gt=0)
+                elif stock == 3:  # Product con bajo stock
+                    search = search.filter(stock__lte=3, stock__gt=0)
                 for s in search:
                     data.append(s.toJSON())
             elif action == 'search_product':

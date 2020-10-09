@@ -35,7 +35,8 @@ class ProductReportForm(Form):
         'style': 'width: 100%',
         'autocomplete': 'off'
     }))
-    choices_stock = [('0', 'Todo el stock'), ('1', 'Productos sin stock'), ('2', 'Productos con stock')]
+    choices_stock = [('0', 'Todo el stock'), ('1', 'Productos sin stock'), ('2', 'Productos con stock'),
+                     ('3', 'Productos con bajo stock')]
     stock = ChoiceField(choices=choices_stock, widget=Select(attrs={
         'class': 'form-control select2',
         'style': 'width: 100%',
