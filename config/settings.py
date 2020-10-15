@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'core.money',
     # django tweaks
     'widget_tweaks',
+    # django afip
+    'django_afip',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +71,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'desarrollo',
+        'NAME': 'desarrollo',
         # 'NAME': 'make-lobase',
         'USER': 'postgres',
         'PASSWORD': 'SanLore10$$',
