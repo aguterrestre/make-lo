@@ -1,0 +1,52 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+{% endblock %}
+
+{% block content %}
+    <div class="card card-success">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-bar"></i>
+                {{ title }}
+            </h3>
+        </div>
+        <div class="card-body">
+
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-secondary btn-flat" name="testafip">
+              <i class="fas fa-times"></i> test afip
+          </a>
+        </div>
+    </div>
+    <script>
+      $(function testAfip() {
+          $('a[name="testafip"]').on('click', function () {
+            $.ajax({
+                url: window.location.pathname,
+                data: function () {
+                    var queryParameters = {
+                        action: 'test_afip'
+                    }
+                    return queryParameters;
+                },
+                type: 'POST',
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+            }).done(function (data) {
+                alert('prueba hecha')
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+            });
+          });
+      });
+    </script>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

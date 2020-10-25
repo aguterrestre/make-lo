@@ -3,6 +3,7 @@ from core.sale.views.client.views import ClientListView, ClientCreateView
 from core.sale.views.client.views import ClientUpdateView, ClientDeleteView
 from core.sale.views.ticket.views import TicketListView, TicketCreateView
 from core.sale.views.ticket.views import TicketCreatePDFView
+from core.sale.views.tests.views import TestsAfipView
 
 app_name = 'sale'
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path('ticket/add/', TicketCreateView.as_view(), name='ticket_create'),
     path('ticket/pdf/add/<int:pk>/', TicketCreatePDFView.as_view(),
          name='ticket_create_pdf'),
+    path('client/testafip/', TestsAfipView.as_view(), name='test_afip'),
 ]
