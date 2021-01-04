@@ -37,6 +37,19 @@ class LoginFormView(LoginView):
         return context
 
 
+class LoginEmptyFormView(LoginView):
+    """
+    Clase para redireccionar al login cuando un usuario ingresa a la url raiz.
+    """
+
+    # Validamos si el user está logueado para no abrir la vista de login
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(settings.LOGIN_REDIRECT_URL)
+        else:
+            return redirect(settings.LOGIN_URL)
+
+
 class LogoutFormView(LogoutView):
     """
     Vista para hacer logout del sistema.

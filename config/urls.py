@@ -5,8 +5,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from core.login.views import LoginEmptyFormView
+
 urlpatterns = [
-    path('', include('core.login.urls')),
+    path('', LoginEmptyFormView.as_view(), name='login_empty'),
     path('admin/', admin.site.urls),
     path('login/', include('core.login.urls')),
     path('sale/', include('core.sale.urls')),
