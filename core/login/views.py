@@ -82,7 +82,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['card_low_product_stock_url'] = reverse_lazy('stock:product_list')
         # Card de nuevas ventas en el día de hoy
         context['card_news_ticket_num'] = Ticket.objects.filter(date_creation__date=datetime.now())
-        context['card_news_ticket_url'] = reverse_lazy('sale:ticket_list')
+        context['card_news_ticket_url'] = reverse_lazy('report:ticket_report')
         # Card de ingresos en el día de hoy
         ticket_today = Ticket.objects.filter(date_creation__date=datetime.now())
         context['card_money_ticket_num'] = ticket_today.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
@@ -101,8 +101,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['card_product_expire_url'] = reverse_lazy('stock:product_list')
         # Card de nuevos proveedores
         context['card_news_provider_num'] = Provider.objects.filter(date_creation__date=datetime.now())
-        context['card_news_provider_url'] = reverse_lazy('purchase:provider_list')
+        context['card_news_provider_url'] = reverse_lazy('report:provider_report')
         # Card de nuevas compras en el día de hoy
         context['card_news_invoice_num'] = Invoice.objects.filter(date_creation__date=datetime.now())
-        context['card_news_invoice_url'] = reverse_lazy('purchase:invoice_list')
+        context['card_news_invoice_url'] = reverse_lazy('report:invoice_report')
         return context

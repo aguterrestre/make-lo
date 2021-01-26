@@ -1,18 +1,26 @@
 var date_range = null;
+var date_creation_range = null;
 var date_now = new moment().format('YYYY-MM-DD');
 var provider_filter = 0;
 
 function generate_report() {
     var parameters = {
         'action': 'search_report',
-        'start_date': date_now,
-        'end_date': date_now,
+        'start_date': '',
+        'end_date': '',
         'provider': provider_filter,
+        'start_creation_date': date_now,
+        'end_creation_date': date_now,
     };
 
     if (date_range !== null) {
         parameters['start_date'] = date_range.startDate.format('YYYY-MM-DD');
         parameters['end_date'] = date_range.endDate.format('YYYY-MM-DD');
+    }
+
+    if (date_creation_range !== null) {
+        parameters['start_creation_date'] = date_creation_range.startDate.format('YYYY-MM-DD');
+        parameters['end_creation_date'] = date_creation_range.endDate.format('YYYY-MM-DD');
     }
 
     $('#table_report').DataTable({
@@ -131,8 +139,30 @@ $(function () {
         generate_report();
     }).on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('Todas las fechas');
-        date_now = '';
         date_range = null;
+        generate_report();
+    });
+
+    // Inicializo el filtro por cumpleaños sin contenido
+    $('input[name="date_birthday_range"]').val('Todas las fechas');
+
+    // Filtro por fecha de creación del proveedor
+    $('input[name="date_creation_range"]').daterangepicker({
+        buttonClasses: 'btn btn-flat',
+        applyButtonClasses: 'btn-success',
+        cancelButtonClasses: 'btn-secondary',
+        locale: {
+            format: 'YYYY-MM-DD',
+            applyLabel: '<i class="fas fa-chart-pie"></i> Aplicar rango',
+            cancelLabel: '<i class="fas fa-times"></i> No aplicar rango',
+        }
+    }).on('apply.daterangepicker', function (ev, picker) {
+        date_creation_range = picker;
+        generate_report();
+    }).on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('Todas las fechas');
+        date_now = '';
+        date_creation_range = null;
         generate_report();
     });
 

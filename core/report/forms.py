@@ -49,6 +49,10 @@ class ProductReportForm(Form):
 
 
 class ProviderReportForm(Form):
+    date_creation_range = CharField(widget=TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
     date_birthday_range = CharField(widget=TextInput(attrs={
         'class': 'form-control',
         'autocomplete': 'off'
