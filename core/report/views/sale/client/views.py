@@ -27,11 +27,17 @@ class ReportClientView(LoginRequiredMixin, TemplateView):
             if action == 'search_report':
                 data = []
                 # Obtengo los filtros elegidos en el template
+                start_creation_date = request.POST.get('start_creation_date', '')
+                end_creation_date = request.POST.get('end_creation_date', '')
                 start_date = request.POST.get('start_date', '')
                 end_date = request.POST.get('end_date', '')
                 client = int(request.POST.get('client', ''))
                 # Hago la busqueda de todos los client
                 search = Client.objects.all()
+                # Filtro la busqueda de client por fecha de creacion
+                if len(start_creation_date) and len(end_creation_date):
+                    search = search.filter(date_creation__date__gte=start_creation_date,
+                                           date_creation__date__lte=end_creation_date)
                 # Filtro la busqueda de client por fecha de nacimiento
                 if len(start_date) and len(end_date):
                     search = search.filter(date_birthday__range=[start_date, end_date])
