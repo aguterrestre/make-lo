@@ -28,7 +28,7 @@ class ProductListView(LoginRequiredMixin, ListView):
         context['entity'] = 'Productos'
         context['dashboard_url'] = reverse_lazy('login:dashboard')
         context['btn_new_detail'] = 'Nuevo Producto'
-        context['product_report_url'] = reverse_lazy('report:product_report')
+        context['product_report_url'] = reverse_lazy('report:product_report', args=[0])
         return context
 
 

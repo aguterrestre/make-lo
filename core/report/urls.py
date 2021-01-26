@@ -12,7 +12,7 @@ urlpatterns = [
     # reports
     path('ticket/', ReportTicketView.as_view(), name='ticket_report'),
     path('client/', ReportClientView.as_view(), name='client_report'),
-    path('product/', ReportProductView.as_view(), name='product_report'),
+    path('product/<int:param>/', ReportProductView.as_view(), name='product_report'),
     path('provider/', ReportProviderView.as_view(), name='provider_report'),
     path('invoice/', ReportInvoiceView.as_view(), name='invoice_report'),
 ]

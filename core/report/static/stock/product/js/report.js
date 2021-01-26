@@ -2,14 +2,17 @@ var date_range = null;
 var date_now = new moment().format('YYYY-MM-DD');
 var product_filter = '';
 var stock_filter = 0;
+var expiration_filter = 0;
+const param = window.location.pathname;
 
 function generate_report() {
     var parameters = {
         'action': 'search_report',
-        'start_date': date_now,
-        'end_date': date_now,
+        'start_date': '',
+        'end_date': '',
         'product': product_filter,
         'stock': stock_filter,
+        'expiration': expiration_filter,
     };
 
     if (date_range !== null) {
@@ -139,6 +142,21 @@ $(function () {
         generate_report();
     });
 
+    // Inicializo el filtro por vencimiento sin contenido
+    $('input[name="date_expiration_range"]').val('Todas las fechas');
+
+    // De acuerdo a parametro enviado por URL es como inicia cada filtro
+    if (param[16] == '1') {  // Filtro por bajo stock
+        $('select[name="stock"]').val('3')
+        stock_filter = 3;
+    } else if (param[16] == '2') {  // Filtro por product por vencer
+        $('select[name="expiration"]').val('1')
+        expiration_filter = 1;
+    } else if (param[16] == '3') {  // Filtro por product vencidos
+        $('select[name="expiration"]').val('2')
+        expiration_filter = 2;
+    };
+
     // Filtro por product
     $('select[name="product"]').select2({
         theme: "bootstrap4",
@@ -161,6 +179,7 @@ $(function () {
                 };
             },
         },
+        // placeholder: 'Todos los productos',
         placeholder: 'Todos los productos',
         minimumInputLength: 3
     }).on('select2:select', function (e) {
@@ -177,6 +196,15 @@ $(function () {
         language: 'es'
     }).on('select2:select', function (e) {
         stock_filter = e.params.data.id;
+        generate_report();
+    });
+
+    // Filtro por expiration
+    $('select[name="expiration"]').select2({
+        theme: "bootstrap4",
+        language: 'es'
+    }).on('select2:select', function (e) {
+        expiration_filter = e.params.data.id;
         generate_report();
     });
 

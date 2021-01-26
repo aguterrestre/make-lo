@@ -79,7 +79,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['card_news_client_url'] = reverse_lazy('report:client_report')
         # Card de productos bajo stock
         context['card_low_product_stock_num'] = Product.objects.filter(stock__lte=3, stock__gt=0)
-        context['card_low_product_stock_url'] = reverse_lazy('stock:product_list')
+        context['card_low_product_stock_url'] = reverse_lazy('report:product_report', args=[1])
         # Card de nuevas ventas en el día de hoy
         context['card_news_ticket_num'] = Ticket.objects.filter(date_creation__date=datetime.now())
         context['card_news_ticket_url'] = reverse_lazy('report:ticket_report')
@@ -95,10 +95,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             if to_expiration <= 3 and to_expiration >= 0:  # aviso hasta 3 días antes del vencimiento
                 product_to_expire += 1
         context['card_product_to_expire_num'] = product_to_expire
-        context['card_product_to_expire_url'] = reverse_lazy('stock:product_list')
+        context['card_product_to_expire_url'] = reverse_lazy('report:product_report', args=[2])
         # Card de productos vencidos
         context['card_product_expire_num'] = Product.objects.filter(date_expiration__lt=datetime.now())
-        context['card_product_expire_url'] = reverse_lazy('stock:product_list')
+        context['card_product_expire_url'] = reverse_lazy('report:product_report', args=[3])
         # Card de nuevos proveedores
         context['card_news_provider_num'] = Provider.objects.filter(date_creation__date=datetime.now())
         context['card_news_provider_url'] = reverse_lazy('report:provider_report')
