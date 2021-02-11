@@ -92,7 +92,15 @@ var tickets = {
                   orderable: false
               },
               {
-                  targets: [4, 5], // columnas precio y subtotal
+                  targets: [4], // columna precio
+                  class: 'text-center',
+                  orderable: false,
+                  render: function (data, type, row) {
+                      return '<input type="text" name="final_price" class="form-control form-control-sm input-sm" autocomplete="off" value="' + row.final_price + '">';
+                  }
+              },
+              {
+                  targets: [5], // columna subtotal
                   class: 'text-center',
                   orderable: false,
                   render: function (data, type, row) {
@@ -116,11 +124,19 @@ var tickets = {
                     forcestepdivisibility: 'none',
                     decimals: 3
                 });
+                $(row).find('input[name="final_price"]').TouchSpin({
+                    min: 0.000,
+                    max: 1000,
+                    step: 1,
+                    forcestepdivisibility: 'none',
+                    decimals: 4
+                });
             },
         });
     }
 };
 
+// Generador de contenido en el Slect2 de productos
 function formatRepo(repo) {
     if (repo.loading) {
         return repo.text;
@@ -223,6 +239,14 @@ $(function () {
             var cant = parseFloat($(this).val());
             var tr = tableTicketForm.cell($(this).closest('td, li')).index();
             tickets.items.products[tr.row].quantity = cant;
+            tickets.calculate_ticket();
+            $('td:eq(5)', tableTicketForm.row(tr.row).node()).html('$' + tickets.items.products[tr.row].subtotal.toFixed(4));
+        })
+        // campo precio de los renglones del ticket
+        .on('change', 'input[name="final_price"]', function () {
+            let price = parseFloat($(this).val());
+            var tr = tableTicketForm.cell($(this).closest('td, li')).index();
+            tickets.items.products[tr.row].final_price = price;
             tickets.calculate_ticket();
             $('td:eq(5)', tableTicketForm.row(tr.row).node()).html('$' + tickets.items.products[tr.row].subtotal.toFixed(4));
         });

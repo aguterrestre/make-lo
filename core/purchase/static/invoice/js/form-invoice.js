@@ -118,17 +118,18 @@ var invoices = {
                     decimals: 3
                 });
                 $(row).find('input[name="purchase_price"]').TouchSpin({
-                    min: 0.001,
+                    min: 0.000,
                     max: 1000,
                     step: 1,
                     forcestepdivisibility: 'none',
-                    decimals: 3
+                    decimals: 4
                 });
             },
         });
     }
 };
 
+// Generador de contenido en el Slect2 de productos
 function formatRepo(repo) {
     if (repo.loading) {
         return repo.text;
@@ -203,7 +204,7 @@ $(function () {
             invoices.items.products[tr.row].purchase_price = cant;
             invoices.calculate_invoice();
             $('td:eq(4)', tableInvoiceForm.row(tr.row).node()).html('$' + invoices.items.products[tr.row].subtotal.toFixed(4));
-        });;
+        });
 
     // evento submit del boton guardar
     $('form').on('submit', function (e) {
