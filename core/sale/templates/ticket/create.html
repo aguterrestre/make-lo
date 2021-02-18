@@ -37,7 +37,7 @@
         </div>
         <div class="card-body">
           <div class="row">
-              <div class="col-lg-9">
+              <div class="col-9">
                   <div class="card card-dark">
                       <div class="card-header">
                           <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de Venta</h3>
@@ -84,19 +84,55 @@
                       </div>
                   </div>
               </div>
-              <div class="col-lg-3">
+              <div class="col-3">
                   <div class="card card-dark">
                       <div class="card-header">
                           <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Venta</h3>
                       </div>
                       <div class="card-body">
                           <input type="hidden" name="action" value="{{ action }}">
-                          {% for field in form.visible_fields %}
-                              <div class="form-group">
-                                  <label for="email">{{ field.label }}:</label>
-                                  {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                          <div class="form-group">
+                              <label for="client">{{ form.client.label}}:</label>
+                              {{ form.client }}
+                          </div>
+                          <div class="form-group">
+                              <label for="voucher_type">{{ form.voucher_type.label}}:</label>
+                              {{ form.voucher_type }}
+                          </div>
+                          <div class="form-group">
+                              <label for="ticket">Comprobante:</label>
+                              <div class="row">
+                                  <div class="col-4">
+                                      {{ form.letter }}
+                                  </div>
+                                  <div class="col-4">
+                                      {{ form.center }}
+                                  </div>
+                                  <div class="col-4">
+                                      {{ form.number }}
+                                  </div>
                               </div>
-                          {% endfor %}
+                          </div>
+                          <div class="form-group">
+                              <label for="date_joined">{{ form.date_joined.label}}:</label>
+                              {{ form.date_joined }}
+                          </div>
+                          <div class="form-group">
+                              <label for="sale_condition">{{ form.sale_condition.label}}:</label>
+                              {{ form.sale_condition }}
+                          </div>
+                          <div class="form-group">
+                              <label for="subtotal">{{ form.subtotal.label}}:</label>
+                              {{ form.subtotal }}
+                          </div>
+                          <div class="form-group">
+                              <label for="total_tax">{{ form.total_tax.label}}:</label>
+                              {{ form.total_tax }}
+                          </div>
+                          <div class="form-group">
+                              <label for="total">{{ form.total.label}}:</label>
+                              {{ form.total }}
+                          </div>
                       </div>
                   </div>
               </div>

@@ -1,5 +1,6 @@
 from django.forms import ModelForm, TextInput, DateInput, Select
-from django.forms import EmailInput
+from django.forms import EmailInput, NumberInput
+from django_afip import models as django_afip
 from datetime import datetime
 from core.sale.models import Client, Ticket
 
@@ -70,16 +71,49 @@ class TicketForm(ModelForm):
     """
     Clase para crear el formulario de venta. Lo usaremos para la cabecera de la venta.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Puesto común por id
+        self.fields['center'].initial = 2
+        # Factura C por id
+        self.fields['voucher_type'].initial = 19
+        # Filtro tipos de comprobantes
+        self.fields['voucher_type'].queryset = django_afip.ReceiptType.objects.filter(pk=19)
+        # Último núm de comprob
+        self.fields['number'].initial = Ticket.get_last_ticket_number(self, 21, 19)
 
     class Meta:
         model = Ticket
-        fields = '__all__'
+        fields = ['client', 'voucher_type', 'letter', 'center', 'number', 'date_joined', 'sale_condition',
+                  'subtotal', 'total_tax', 'total']
         widgets = {
             'client': Select(attrs={
                 'class': 'form-control select2',
                 'style': 'width: 100%',
+                'autocomplete': 'off',
             }),
-            'voucher_type': Select(),
+            'voucher_type': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width: 100%',
+                'autocomplete': 'off',
+            }),
+            'letter': Select(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+                'autocomplete': 'off',
+                'disabled': True,
+            }),
+            'center': Select(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+                'autocomplete': 'off',
+            }),
+            'number': NumberInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%',
+                'autocomplete': 'off',
+                'readonly': True,
+            }),
             'date_joined': DateInput(format='%Y-%m-%d',
                                      attrs={
                                             'value': datetime.now().strftime('%Y-%m-%d'),
@@ -89,16 +123,27 @@ class TicketForm(ModelForm):
                                             'data-target': '#date_joined',
                                             'data-toggle': 'datetimepicker'
                                      }),
-            'sale_condition': Select(),
+            'sale_condition': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width: 100%',
+                'autocomplete': 'off',
+            }),
             'subtotal': DateInput(attrs={
                                         'readonly': True,
+                                        'class': 'form-control',
+                                        'style': 'width: 100%',
+                                        'autocomplete': 'off',
                                 }),
             'total_tax': DateInput(attrs={
                                         'readonly': True,
+                                        'class': 'form-control',
+                                        'style': 'width: 100%',
+                                        'autocomplete': 'off',
                                 }),
             'total': DateInput(attrs={
                                         'readonly': True,
+                                        'class': 'form-control',
+                                        'style': 'width: 100%',
+                                        'autocomplete': 'off',
                                 })
         }
-        exclude = ['letter', 'center', 'number', 'date_creation', 'user_creation', 'user_update',
-                   'date_update']

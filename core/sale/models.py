@@ -2,6 +2,8 @@ from django.db import models
 from django.forms import model_to_dict
 from django.conf import settings
 
+from django_afip import models as django_afip
+
 from datetime import datetime
 
 from core.sale.choices.client.choices import GENDER_CHOICES
@@ -296,14 +298,15 @@ class Client(models.Model):
 
 class Ticket(models.Model):
     """
-    Tabla para guardar los comprobantes de ventas.
+    Modelo para administrar los comprobantes de ventas.
+    Tiene relación con django_afip.Receipt. Dicha relación es null si punto de venta es común
     """
-    # id = models.AutoField(primary_key=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT, default=1, verbose_name='Cliente')
     letter = models.CharField(max_length=1, choices=LETTER_CHOICESS, default='c', verbose_name='Letra')
-    center = models.PositiveIntegerField(verbose_name='Centro')
+    center = models.ForeignKey(django_afip.PointOfSales, on_delete=models.PROTECT, null=True,
+                               verbose_name='Punto de Venta')
     number = models.PositiveIntegerField(verbose_name='Número')
-    voucher_type = models.ForeignKey(Voucher_Type, on_delete=models.PROTECT, default=1,
+    voucher_type = models.ForeignKey(django_afip.ReceiptType, on_delete=models.PROTECT, null=True,
                                      verbose_name='Tipo de comprobante')
     date_joined = models.DateField(default=datetime.now, verbose_name='Fecha')
     sale_condition = models.ForeignKey(Sale_Condition, on_delete=models.PROTECT, default=1,
@@ -322,11 +325,10 @@ class Ticket(models.Model):
                                     decimal_places=4, verbose_name='Impuesto')
     total = models.DecimalField(default=0.00, max_digits=12, decimal_places=4,
                                 verbose_name='Total')
+    receipt_afip = models.OneToOneField(django_afip.Receipt, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        # return (f"{self.letter}-{self.center}-{self.number}")
-        # return ("{}-{:04d}-{:08d}".format(self.letter, self.center, self.number))
-        return ("{}-{:04d}-{:08d}".format(self.get_letter_display(), self.center, self.number))
+        return ("{}-{:04d}-{:08d}".format(self.get_letter_display(), self.center.number, self.number))
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -354,9 +356,18 @@ class Ticket(models.Model):
         self.user_update = user
         super(Ticket, self).save(*args, **kwargs)
 
+    def get_last_ticket_number(self, point_of_sales, receipt_type):
+        """
+        Obtiene el último número de comprobante de acuerdo al puesto y tipo de comprobante
+        """
+        last_rec_number = Ticket.objects.filter(center=point_of_sales, voucher_type=receipt_type).first()
+        if not last_rec_number:
+            return 1
+        return last_rec_number.number
+
     class Meta:
-        verbose_name = 'Boleta'
-        verbose_name_plural = 'Boletas'
+        verbose_name = 'Comprobante de Venta'
+        verbose_name_plural = 'Comprobantes de Ventas'
         ordering = ['-id']
 
 
