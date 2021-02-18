@@ -356,14 +356,14 @@ class Ticket(models.Model):
         self.user_update = user
         super(Ticket, self).save(*args, **kwargs)
 
-    def get_last_ticket_number(self, point_of_sales, receipt_type):
+    def get_next_ticket_number(self, point_of_sales, receipt_type):
         """
-        Obtiene el último número de comprobante de acuerdo al puesto y tipo de comprobante
+        Obtiene el proximo número de comprobante a realizar de acuerdo al puesto y tipo de comprobante
         """
         last_rec_number = Ticket.objects.filter(center=point_of_sales, voucher_type=receipt_type).first()
         if not last_rec_number:
             return 1
-        return last_rec_number.number
+        return last_rec_number.number + 1
 
     class Meta:
         verbose_name = 'Comprobante de Venta'

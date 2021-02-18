@@ -77,10 +77,10 @@ class TicketForm(ModelForm):
         self.fields['center'].initial = 2
         # Factura C por id
         self.fields['voucher_type'].initial = 19
-        # Filtro tipos de comprobantes
+        # Filtro tipos de comprobantes. Solo Factura C
         self.fields['voucher_type'].queryset = django_afip.ReceiptType.objects.filter(pk=19)
         # Último núm de comprob
-        self.fields['number'].initial = Ticket.get_last_ticket_number(self, 21, 19)
+        self.fields['number'].initial = Ticket.get_next_ticket_number(self, 2, 19)
 
     class Meta:
         model = Ticket

@@ -153,6 +153,10 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                             item['value'] = i.name
                             data.append(item)
                     """
+            elif action == 'search_next_ticket_number':
+                tickets = json.loads(request.POST['tickets'])
+                next_number = Ticket.get_next_ticket_number(self, tickets['center'], tickets['voucher_type'])
+                data = {'next_ticket_number': next_number}
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:

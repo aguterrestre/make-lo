@@ -7,7 +7,11 @@ var tickets = {
         subtotal: 0.0000,
         total_tax: 0.0000,
         total: 0.0000,
-        products: []
+        products: [],
+        voucher_type: 19,  // Factura C
+        letter: 'c',  // Letra C
+        center: 2,  // Puesto comun
+        number: 1  // Numero 1
     },
     calculate_ticket: function () {
         var subtotal = 0.0000;
@@ -263,12 +267,16 @@ $(function () {
         tickets.items.client = $('select[name="client"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         tickets.items.date_joined = $('input[name="date_joined"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         tickets.items.sale_condition = $('select[name="sale_condition"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        tickets.items.voucher_type = $('select[name="voucher_type"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        tickets.items.letter = $('select[name="letter"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        tickets.items.center = $('select[name="center"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
+        tickets.items.number = $('input[name="number"]').val(); // obtenemos el valor ingresado en pantalla y lo guardamos en nuestra estructura
         var parameters = new FormData(); // creamos un objeto FormData para enviarlo a nuestra vista y guardar sus datos en el modelo
         parameters.append('action', $('input[name="action"]').val()); // le agregamos un parametro para definir la accion
         parameters.append('tickets', JSON.stringify(tickets.items)); // usamos metodo de JS para transformar un objeto js a un json string
-        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?',
+        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de registrar el comprobante de venta?',
          parameters, function (response) {
-           alert_action_ticket('Notificación', '¿Desea imprimir la boleta de venta?', function () {
+           alert_action_ticket('Notificación', '¿Desea generar un PDF del comprobante de venta?', function () {
               window.open('/sale/ticket/pdf/add/' + response.id + '/', '_blank');
               location.href = '/sale/ticket/list/'; // donde va a retornar cuando termine la transacción
             }, function () {
@@ -309,6 +317,32 @@ $(function () {
         data.options = '';
         tickets.add(data);
         $(this).val('').trigger('change.select2');
+    });
+
+    // Selector de Punto de venta
+    $('select[name="center"]').on('change', function (e) {
+        e.preventDefault(); // cancela el evento por defecto
+        tickets.items.center = $(this).val();
+        tickets.items.voucher_type = $('select[name="voucher_type"]').val();
+        var parameters = new FormData(); // Creamos una variable tipo formulario
+        parameters.append('action', 'search_next_ticket_number'); // le agregamos un parametro para definir la accion
+        parameters.append('tickets', JSON.stringify(tickets.items)); // usamos metodo de JS para transformar un objeto js a un json string
+        // Hacemos POST a la vista mediante AJAX
+        $.ajax({
+            url: window.location.pathname,
+            // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            data: parameters,
+            dataType: 'json',
+            type: 'POST',
+            processData: false,
+            contentType: false
+        }).done(function(response) {
+            // En caso de hacerse  y recibir una respuesta hacemos una accion
+            $('input[name="number"]').val(response.next_ticket_number)
+        }).fail(function (error) {
+            // En caso de error hacemos una accion
+            alert('Ha ocurrido un error!');
+        });
     });
 
     // creamos la tabla vacía
