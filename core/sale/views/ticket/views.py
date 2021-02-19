@@ -8,6 +8,8 @@ from django.db import transaction
 from django.template.loader import get_template
 from django.conf import settings
 
+from django_afip import models as django_afip
+
 from core.sale.models import Ticket, Ticket_Detail, Client, Sale_Condition
 from core.sale.forms import TicketForm
 
@@ -22,7 +24,7 @@ import os
 
 class TicketListView(LoginRequiredMixin, ListView):
     """
-    Clase para ver en pantalla los tickets de la empresa a manera de listado.
+    Vista para consultar los tickets en forma de listado.
     """
     model = Ticket
     template_name = 'ticket/list.html'
@@ -113,10 +115,10 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                     tickets = json.loads(request.POST['tickets'])
                     ticket = Ticket()
                     ticket.client = Client(id=(tickets['client']))
-                    for comp in Company.objects.filter(id=1):
-                        ticket.letter = comp.letter
-                        ticket.center = comp.center
-                        ticket.number = comp.number
+                    ticket.letter = tickets['letter']
+                    ticket.center = django_afip.PointOfSales(id=tickets['center'])
+                    ticket.number = tickets['number']
+                    ticket.voucher_type = django_afip.ReceiptType(id=tickets['voucher_type'])
                     ticket.date_joined = tickets['date_joined']
                     ticket.sale_condition = Sale_Condition(id=(tickets['sale_condition']))
                     ticket.subtotal = float(tickets['subtotal'])
@@ -134,11 +136,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         ticket_detail.final_price = float(i['final_price'])
                         ticket_detail.subtotal = float(i['subtotal'])
                         ticket_detail.save()
-                    data = {'id': ticket.id}  # se usa imprimir el ticket
-                    # Aumentamos el numerador de ticket en la empresa
-                    company = Company.objects.get(pk=1)
-                    company.number = ticket.number + 1
-                    company.save()
+                    data = {'id': ticket.id}  # se usa para imprimir el ticket
                     # Disminuimos el stock de cada producto
                     for p in tickets['products']:
                         product = Product.objects.get(pk=p['id'])

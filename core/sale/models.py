@@ -334,7 +334,7 @@ class Ticket(models.Model):
         item = model_to_dict(self)
         item['client'] = self.client.toJSON()
         item['ticket_number'] = "{}-{:04d}-{:08d}".format(self.get_letter_display(),
-                                                          self.center,
+                                                          self.center.number,
                                                           self.number)
         item['subtotal'] = format(self.subtotal, '.4f')
         item['total_tax'] = format(self.total_tax, '.4f')
