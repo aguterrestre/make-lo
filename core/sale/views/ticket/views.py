@@ -48,6 +48,8 @@ class TicketListView(LoginRequiredMixin, ListView):
                 data = []
                 for i in Ticket_Detail.objects.filter(ticket=request.POST['id']):
                     data.append(i.toJSON())
+            elif action == 'ticket_validated_afip':
+                pass  # sin desarrollar en caso de volver a validar un comprobante en AFIP
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -142,6 +144,50 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         product = Product.objects.get(pk=p['id'])
                         product.stock = float(product.stock) - float(p['quantity'])
                         product.save()
+                    # Generamos comprobante en AFIP
+                    center = django_afip.PointOfSales.objects.get(pk=tickets['center'])
+                    if center.issuance_type != 'COMUN':
+                        # Generamos datos iniciales
+                        receipt_type = tickets['voucher_type']
+                        concept = 2  # servicios
+                        document_type = 1  # CUIT
+                        document_number = 23343123469
+                        currency = 1  # 'PES'
+                        # Generamos instancia de un comprobante
+                        receipt = django_afip.Receipt(
+                            point_of_sales=django_afip.PointOfSales(id=center.id),
+                            receipt_type=django_afip.ReceiptType(id=receipt_type),
+                            concept=django_afip.ConceptType(id=concept),
+                            document_type=django_afip.DocumentType(id=document_type),
+                            document_number=document_number,
+                            # receipt_number=5,
+                            issued_date=tickets['date_joined'],
+                            total_amount=float(tickets['total']),
+                            net_untaxed=0,
+                            net_taxed=float(tickets['total']),
+                            exempt_amount=0,
+                            service_start='2021-02-22',
+                            service_end='2021-02-22',
+                            expiration_date='2021-02-22',
+                            currency=django_afip.CurrencyType(id=currency),
+                            currency_quote=1,
+                            # related_receipts
+                        )
+                        print('creo instancia del comprobante')
+
+                        # Guardo el comprobante
+                        receipt.save()
+                        print('guardo instancia del comprobante')
+
+                        # Genero comprobante
+                        receipt.validate(None, True)
+                        print('generamos el comprobante')
+
+                        # Relacionamos comprobante afip con comprobante propio
+                        ticket.receipt_afip = django_afip.Receipt(id=receipt)
+                        ticket.save()
+                        print('Guardo relacion de comprobantes')
+
                     """
                     elif action == 'search_client':
                         data = []

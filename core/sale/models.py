@@ -341,7 +341,20 @@ class Ticket(models.Model):
         item['total'] = format(self.total, '.4f')
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
         item['det'] = [i.toJSON() for i in self.ticket_detail_set.all()]
+        item['validated'] = self.get_toJSON_receipt_afip()
         return item
+
+    def get_toJSON_receipt_afip(self):
+        if self.receipt_afip:
+            rec_afip = django_afip.Receipt.objects.get(id=self.receipt_afip.id)
+            rec_validation_afip = django_afip.ReceiptValidation.objects.get(receipt=rec_afip.id)
+            toJSON_rec_validation_afip = model_to_dict(rec_validation_afip)
+            validated = toJSON_rec_validation_afip['result']
+        else:
+            toJSON_rec_validation_afip = {'result': 'C'}
+            validated = toJSON_rec_validation_afip['result']
+
+        return validated
 
     def save(self,  *args, **kwargs):
         """
@@ -398,6 +411,6 @@ class Ticket_Detail(models.Model):
         return item
 
     class Meta:
-        verbose_name = 'Detalle de Boleta'
-        verbose_name_plural = 'Detalle de Boletas'
+        verbose_name = 'Detalle de Comprobante de Venta'
+        verbose_name_plural = 'Detalle de Comprobantes de Ventas'
         ordering = ['row_number']

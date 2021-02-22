@@ -274,6 +274,7 @@ $(function () {
         var parameters = new FormData(); // creamos un objeto FormData para enviarlo a nuestra vista y guardar sus datos en el modelo
         parameters.append('action', $('input[name="action"]').val()); // le agregamos un parametro para definir la accion
         parameters.append('tickets', JSON.stringify(tickets.items)); // usamos metodo de JS para transformar un objeto js a un json string
+        console.log(parameters)
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de registrar el comprobante de venta?',
          parameters, function (response) {
            alert_action_ticket('Notificación', '¿Desea generar un PDF del comprobante de venta?', function () {

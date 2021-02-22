@@ -50,6 +50,7 @@ $(function () {
             {"data": "client.full_name"},
             {"data": "ticket_number"},
             {"data": "date_joined"},
+            {"data": "validated"},
             {"data": "total"},
             {"data": "options"},
         ],
@@ -59,7 +60,13 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return '$' + parseFloat(data).toFixed(4);
+                    let validate = ''
+                    if (data == 'A') {
+                        validate = '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+                    } else if (data == 'R') {
+                        validate = '<img src="/static/admin/img/icon-no.svg" alt="True">'
+                    }
+                    return validate;
                 }
             },
             {
@@ -67,8 +74,19 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
+                    return '$' + parseFloat(data).toFixed(4);
+                }
+            },
+            {
+                targets: [6],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
                     var buttons = '<a rel="ticket_detail" class="btn btn-success btn-xs btn-flat" style="color: white;"><i class="fas fa-search"></i></a> ';
                     buttons += '<a href="/sale/ticket/pdf/add/'+row.id+'/" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a> ';
+                    if (row.validated == 'R') {
+                        buttons += '<a rel="ticket_validated_afip" class="btn btn-success btn-xs btn-flat" style="color: white;"><i class="fas fa-sync-alt"></i></a> ';
+                    }
                     return buttons;
                 }
             },
@@ -155,6 +173,8 @@ $(function () {
             });
 
             $('#modal_ticket_detail').modal('show');
-        });
-
+        })
+        .on('click', 'a[rel="ticket_validated_afip"]', function () {
+            alert('Validando en AFIP')
+        })
 });
