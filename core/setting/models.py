@@ -2,24 +2,24 @@ from django.db import models
 from django.forms import model_to_dict
 from django.conf import settings
 
-from core.sale.models import Fiscal_Condition, Document_Type, City
-from core.sale.choices.ticket.choices import LETTER_CHOICESS
+from django_afip import models as django_afip
 
-from datetime import datetime
+from core.sale.models import City
+from core.sale.choices.ticket.choices import LETTER_CHOICESS
 
 
 class Company(models.Model):
     """
-    Tabla para guardar los datos de la empresa que usara el sistema.
+    Modelo para administrar los datos de empresa.
     """
-    # id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, verbose_name='Nombre')
     address = models.CharField(max_length=200, default='', blank=True, verbose_name='Dirección')
     contact_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Contacto')
-    fiscal_condition = models.ForeignKey(Fiscal_Condition, on_delete=models.PROTECT,
-                                         default=1, verbose_name='Condición fiscal')
-    document_type = models.ForeignKey(Document_Type, default=1, on_delete=models.PROTECT,
-                                      verbose_name='Tipo documento')
+    fiscal_condition = models.CharField(max_length=60, default='Responsable Monotributo',
+                                        choices=((cond, cond,) for cond in django_afip.VAT_CONDITIONS),
+                                        verbose_name='Condición fiscal')
+    document_type = models.ForeignKey(django_afip.DocumentType, null=True, on_delete=models.PROTECT,
+                                      default=1, verbose_name='Tipo documento')
     document = models.CharField(max_length=25, default='', verbose_name='Número documento')
     letter = models.CharField(max_length=1, choices=LETTER_CHOICESS, default='c', verbose_name='Letra')
     center = models.PositiveIntegerField(verbose_name='Centro')
@@ -39,8 +39,7 @@ class Company(models.Model):
                                      verbose_name='Foto para Comprobante de venta')
     document_IIBB = models.CharField(max_length=25, default='', blank=True,
                                      verbose_name='Número ingresos brutos')
-    date_activity_start = models.DateField(default=datetime.now,  blank=True,
-                                           verbose_name='Fecha de Inicio de actidad')
+    date_activity_start = models.DateField(null=True, blank=True, verbose_name='Inicio de actidad')
     residence_city = models.ForeignKey(City, on_delete=models.PROTECT, default=1, verbose_name='Ciudad')
 
     def __str__(self):

@@ -1,6 +1,5 @@
 from django.forms import ModelForm, TextInput, DateInput, Select
 from django.forms import EmailInput
-from datetime import datetime
 from core.setting.models import Company
 
 
@@ -14,7 +13,8 @@ class CompanyForm(ModelForm):
 
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['name', 'address', 'contact_email', 'fiscal_condition', 'document_type', 'document',
+                  'document_IIBB', 'date_activity_start']
         widgets = {
             'name': TextInput(
                 attrs={
@@ -45,10 +45,9 @@ class CompanyForm(ModelForm):
             ),
             'date_activity_start': DateInput(format='%Y-%m-%d',
                                              attrs={
-                                                'value': datetime.now().strftime('%Y-%m-%d'),
-                                             }
-                                             ),
-            'residence_city': Select()
+                                                    'class': 'datetimepicker-input',
+                                                    'id': 'date_activity_start',
+                                                    'data-target': '#date_activity_start',
+                                                    'data-toggle': 'datetimepicker'
+                                             })
         }
-        exclude = ['letter', 'center', 'number', 'image_login', 'image_sidebar', 'image_favicon',
-                   'description', 'image_ticket']

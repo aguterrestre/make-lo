@@ -1,1 +1,25 @@
 {% extends 'form.html' %}
+{% load static %}
+
+{% block head_form %}
+<!-- Plugins para campo fecha -->
+<script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+<script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+<link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        // Guardo en variable el componente date_activity_start
+        let input_date_activity_start = $('input[name="date_activity_start"]');
+        // Inicializo el componente date_activity_start
+        input_date_activity_start.datetimepicker({
+                useCurrent: false,
+                format: 'YYYY-MM-DD',
+                locale: 'es',
+                keepOpen: false,
+         });
+         // Le asigno un valor al componente date_activity_start
+        input_date_activity_start.datetimepicker('date', input_date_activity_start.val());
+    </script>
+{% endblock %}

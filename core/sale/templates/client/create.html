@@ -10,11 +10,16 @@
 
 {% block javascript %}
     <script>
-        // fecha de nacimiento del cliente
-        $('#date_birthday').datetimepicker({
-          format: 'YYYY-MM-DD',
-          date: moment().format("YYYY-MM-DD"),
-          locale: 'es'
-        });
+        // Guardo en variable el componente date_birthday
+        let input_date_birthday = $('input[name="date_birthday"]');
+        // Inicializo el componente date_birthday
+        input_date_birthday.datetimepicker({
+                useCurrent: false,
+                format: 'YYYY-MM-DD',
+                locale: 'es',
+                keepOpen: false,
+         });
+         // Le asigno un valor al componente date_birthday
+        input_date_birthday.datetimepicker('date', input_date_birthday.val());
     </script>
 {% endblock %}
