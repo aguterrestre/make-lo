@@ -2,82 +2,113 @@
 {% load static %}
 
 <html lang="en">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>{{ title }}</title>
-    <style>
-        .img-invoice {
-            width: 100px;
-            text-align: left;
-            margin: 0 auto;
-        }
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Make-lo</title>
+        <style>
+              .img-invoice {
+                  width: 100px;
+                  text-align: left;
+                  margin: 0 auto;
+              }
 
-        .head {
-            text-align: left;
-            text-transform: uppercase;
-        }
+              .head {
+                  text-align: left;
+                  text-transform: uppercase;
+              }
 
-        .head-2 {
-            text-align: right;
-            text-transform: uppercase;
-        }
+              .head-2 {
+                  text-align: right;
+                  text-transform: uppercase;
+              }
 
-        #invoice thead tr th {
-            text-align: left;
-            border-bottom: 1px solid black;
-            border-top: 1px solid black;
-            padding-top: 4px;
-        }
+              #invoice thead tr th {
+                  text-align: left;
+                  border-bottom: 1px solid black;
+                  border-top: 1px solid black;
+                  padding-top: 4px;
+              }
 
-        #invoice thead tr {
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+              #invoice thead tr {
+                  margin-bottom: 0;
+                  padding-bottom: 0;
+              }
 
-        #invoice tbody tr {
-            padding: 0;
-        }
+              #invoice tbody tr {
+                  padding: 0;
+              }
 
-        .text-center{
-            text-align: center;
-        }
-    </style>
+              .text-center{
+                  text-align: center;
+              }
+
+              .cae {
+                  margin-left: 20px;
+                  margin-top: 350px;
+              }
+
+              .barcode img {
+                  height: 80px;
+                  width: 450px;
+              }
+
+        </style>
+    </head>
     <body>
       <img src="{{ company.get_photo_image_ticket }}" class="img-invoice">
-      <p class="head">
-          <b>{{ company.name|upper }}</b><br>
-          <b>Razón Social:</b> {{ company.name|upper }}<br>
-          <b>Domicilio Comercial:</b> {{ company.address|upper }} - {{ company.residence_city }},
-          {{ company.residence_city.province.name }}, {{ company.residence_city.province.country.name }}<br>
-          <b>Condición frente al IVA:</b> {{ company.fiscal_condition.name }}<br>
-      </p>
-      <p class="head-2">
-          <b>FACTURA</b><br>
-          <b>Punto de Venta:</b> {{ ticket }}<br>
-          <b>Fecha de Emisión:</b> {{ ticket.date_joined }}<br>
-          <b>CUIT:</b> {{ company.document }}<br>
-          <b>Ingresos Brutos:</b> {{ company.document_IIBB }}<br>
-          <b>Fecha de inicio de Actividades:</b> {{ company.date_activity_start }}
-      </p>
+      <table id="invoice">
+        <tbody>
+          <tr>
+              <td style="width: 60%; text-align: left;">
+                <b>{{ company.name|upper }}</b><br>
+                <b>Razón Social:</b> {{ company.name|upper }}<br>
+                <b>Domicilio Comercial:</b> {{ company.address|upper }} - {{ company.residence_city }},
+                {{ company.residence_city.province.name }}, {{ company.residence_city.province.country.name }}<br>
+                <b>Condición frente al IVA:</b> {{ company.get_fiscal_condition_display }}<br>
+              </td>
+              <td style="width: 30%;"></td>
+              <td style="width: 60%; text-align: left;">
+                <b>{{ ticket.voucher_type|upper }}</b><br>
+                <b>Punto de Venta:</b> {{ ticket }}<br>
+                <b>Fecha de Emisión:</b> {{ ticket.date_joined|date:'d/m/Y' }}<br>
+                <b>CUIT:</b> {{ company.document }}<br>
+                <b>Ingresos Brutos:</b> {{ company.document_IIBB }}<br>
+                <b>Fecha de inicio de Actividades:</b> {{ company.date_activity_start|date:'d/m/Y' }}
+              </td>
+              <td style="width: 20%;"></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
       <hr>
-      <p>
-          <b>CUIT:</b> {{ ticket.client.document }}
-          <b>Apellido y Nombre / Razón Social:</b> {{ ticket.client|upper }}<br>
-          <b>Condición frente al IVA:</b> {{ ticket.client.fiscal_condition.name }}
-          <b>Domicilio:</b> {{ ticket.client.address }} - {{ ticket.client.residence_city }},
-          {{ ticket.client.residence_city.province.name }},
-          {{ ticket.client.residence_city.province.country.name }}<br>
-          <b>Condición de Venta:</b> {{ ticket.sale_condition.name }}
-      </p>
+      <table id="invoice">
+        <tbody>
+          <td style="width: 60%; text-align: left;">
+            <b>CUIT:</b> {{ ticket.client.document }}<br>
+            <b>Condición frente al IVA:</b> {{ ticket.client.get_fiscal_condition_display }}<br>
+            <b>Condición de Venta:</b> {{ ticket.sale_condition.name }}
+          </td>
+          <td style="width: 30%;"></td>
+          <td style="width: 60%; text-align: left;">
+            <b>Apellido y Nombre / Razón Social:</b> {{ ticket.client|upper }}<br>
+            <b>Domicilio:</b> {{ ticket.client.address }} - {{ ticket.client.residence_city }},
+            {{ ticket.client.residence_city.province.name }},
+            {{ ticket.client.residence_city.province.country.name }}<br>
+          </td>
+          <td style="width: 20%;"></td>
+        </tbody>
+      </table>
       <hr>
+      <br>
       <table id="invoice">
           <thead>
             <tr>
                 <th style="width: 55%;">PRODUCTO</th>
                 <th style="width: 10%; text-align: center;">CANTIDAD</th>
-                <th style="width: 20%; text-align: center;">PRECIO FINAL</th>
-                <th style="width: 20%; text-align: right;">SUBTOTAL</th>
+                <th style="width: 20%; text-align: center;">PRECIO VENTA</th>
+                <th style="width: 20%; text-align: right;">TOTAL</th>
             </tr>
           </thead>
           <tbody>
@@ -103,12 +134,26 @@
             </tr>
           </tbody>
       </table>
-      <table style="margin-top: 250px;">
-          <thead>
-            <tr>
-                <th>****GRACIAS POR SU COMPRA****</th>
-            </tr>
-          </thead>
-      </table>
+      {% if ticket.receipt_afip %}
+          <footer>
+              <p class="cae">
+                <strong>CAE: </strong>
+                {{ ticket.receipt_afip.validation.cae }}
+                <strong>Vencimiento CAE: </strong>
+                {{ ticket.receipt_afip.validation.cae_expiration|date:'d/m/Y' }}
+              </p>
+
+              <div class="barcode">
+                <img src="data:image/png;base64,{{barcode}}">
+              </div>
+
+              <p style="margin-left: 20px;">
+                  Consultas de validez:
+                  <a href="http://www.afip.gob.ar/genericos/consultacae/">
+                    http://www.afip.gob.ar/genericos/consultacae/
+                  </a>
+              </p>
+          </footer>
+      {% endif %}
     </body>
 </html>

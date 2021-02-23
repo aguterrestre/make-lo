@@ -1,3 +1,5 @@
+import base64
+
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
@@ -9,6 +11,7 @@ from django.template.loader import get_template
 from django.conf import settings
 
 from django_afip import models as django_afip
+from django_afip import pdf
 
 from core.sale.models import Ticket, Ticket_Detail, Client, Sale_Condition
 from core.sale.forms import TicketForm
@@ -234,10 +237,17 @@ class TicketCreatePDFView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         try:
-            template = get_template('ticket/createpdf0.html')
+            template = get_template('ticket/createpdf.html')
+            barcode = ''
+            ticket = Ticket.objects.get(pk=self.kwargs['pk'])
+            if ticket.receipt_afip:
+                receipt = django_afip.Receipt.objects.get(pk=ticket.receipt_afip.id)
+                generator = pdf.ReceiptBarcodeGenerator(receipt)
+                barcode = (base64.b64encode(generator.generate_barcode())).decode()
             context = {
-                'ticket': Ticket.objects.get(pk=self.kwargs['pk']),
-                'company': Company.objects.get(pk=1)
+                'ticket': ticket,
+                'company': Company.objects.get(pk=1),
+                'barcode': barcode
             }
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')

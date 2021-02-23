@@ -275,9 +275,9 @@ $(function () {
         parameters.append('action', $('input[name="action"]').val()); // le agregamos un parametro para definir la accion
         parameters.append('tickets', JSON.stringify(tickets.items)); // usamos metodo de JS para transformar un objeto js a un json string
         console.log(parameters)
-        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de registrar el comprobante de venta?',
+        submit_with_ajax(window.location.pathname, 'Registrar comprobante', '¿Estas seguro de registrar el comprobante de venta?',
          parameters, function (response) {
-           alert_action_ticket('Notificación', '¿Desea generar un PDF del comprobante de venta?', function () {
+           alert_action_ticket('Visualizar PDF', '¿Desea ver el comprobante de venta en formato PDF?', function () {
               window.open('/sale/ticket/pdf/add/' + response.id + '/', '_blank');
               location.href = '/sale/ticket/list/'; // donde va a retornar cuando termine la transacción
             }, function () {
