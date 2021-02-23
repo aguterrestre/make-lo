@@ -224,9 +224,8 @@ class Client_Status(models.Model):
 
 class Client(models.Model):
     """
-    Tabla para guardar los clientes.
+    Modelo para administrar los clientes.
     """
-    # id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, default='', verbose_name='Nombre')
     surname = models.CharField(max_length=150, default='', blank=True, verbose_name='Apellido')
     business_name = models.CharField(max_length=150, default='', verbose_name='Nombre comercial')
@@ -245,12 +244,11 @@ class Client(models.Model):
                                     blank=True, null=True, default=None)
     date_update = models.DateTimeField(auto_now=True, null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='male', verbose_name='Sexo')
-    document_type = models.ForeignKey(Document_Type, default=1, on_delete=models.PROTECT,
+    document_type = models.ForeignKey(django_afip.DocumentType, null=True, on_delete=models.PROTECT,
                                       verbose_name='Tipo documento')
-    fiscal_condition = models.ForeignKey(Fiscal_Condition, on_delete=models.PROTECT,
-                                         default=1, verbose_name='Condición fiscal')
-    # photo = models.ForeignKey(Client_Photo, on_delete=models.PROTECT,
-    #                           default=1, verbose_name='Foto')
+    fiscal_condition = models.CharField(max_length=60, default='Consumidor Final',
+                                        choices=((cond, cond,) for cond in django_afip.CLIENT_VAT_CONDITIONS),
+                                        verbose_name='Condición fiscal')
     photo = models.ImageField(upload_to='sale/client_profile/%Y/%m/%d',
                               null=True, blank=True, max_length=150, verbose_name='Foto')
     residence_city = models.ForeignKey(City, on_delete=models.PROTECT, default=1,
@@ -269,7 +267,7 @@ class Client(models.Model):
         # item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         item['photo'] = self.get_photo()
         item['text'] = (f"{self.name} {self.surname}")
-        item['document_type'] = self.document_type.name
+        item['document_type'] = self.document_type.description
         return item
 
     def get_photo(self):

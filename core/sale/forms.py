@@ -7,7 +7,7 @@ from core.sale.models import Client, Ticket
 
 class ClientForm(ModelForm):
     """
-    Clase para crear el formulario de cliente
+    Clase para crear el formulario de cliente.
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,7 +15,8 @@ class ClientForm(ModelForm):
 
     class Meta:
         model = Client
-        fields = '__all__'
+        fields = ['name', 'surname', 'address', 'contact_email', 'telephone', 'date_birthday', 'gender',
+                  'document_type', 'document', 'fiscal_condition']
         widgets = {
             'name': TextInput(
                 attrs={
@@ -42,11 +43,6 @@ class ClientForm(ModelForm):
                     'placeholder': 'Ingrese su email de contacto',
                 }
             ),
-            'sales_email': EmailInput(
-                attrs={
-                    'placeholder': 'Ingrese su email de facturación',
-                }
-            ),
             'telephone': TextInput(
                 attrs={
                     'placeholder': 'Ingrese su teléfono',
@@ -54,17 +50,15 @@ class ClientForm(ModelForm):
             ),
             'date_birthday': DateInput(format='%Y-%m-%d',
                                        attrs={
-                                            # 'value': datetime.now().strftime('%Y-%m-%d'),
-                                            'placeholder': 'Ejemplo: 1989-02-18 (formato año-mes-día)',
-                                       }
-                                       ),
+                                            'class': 'datetimepicker-input',
+                                            'id': 'date_birthday',
+                                            'data-target': '#date_birthday',
+                                            'data-toggle': 'datetimepicker'
+                                       }),
             'gender': Select(),
             'document_type': Select(),
             'fiscal_condition': Select()
         }
-        exclude = ['business_name', 'trade_name', 'comercial_address',
-                   'user_creation', 'date_creation', 'user_update',
-                   'date_update', 'photo', 'residence_city', 'status', 'sale_condition']
 
 
 class TicketForm(ModelForm):

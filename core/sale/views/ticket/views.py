@@ -149,9 +149,10 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                     if center.issuance_type != 'COMUN':
                         # Generamos datos iniciales
                         receipt_type = tickets['voucher_type']
-                        concept = 2  # servicios
-                        document_type = 1  # CUIT
-                        document_number = 23343123469
+                        concept = 3  # productos y servicios
+                        ticket_client = Client.objects.get(id=(tickets['client']))
+                        document_type = ticket_client.document_type.id
+                        document_number = ticket_client.document
                         currency = 1  # 'PES'
                         # Generamos instancia de un comprobante
                         receipt = django_afip.Receipt(
@@ -166,37 +167,20 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                             net_untaxed=0,
                             net_taxed=float(tickets['total']),
                             exempt_amount=0,
-                            service_start='2021-02-22',
-                            service_end='2021-02-22',
-                            expiration_date='2021-02-22',
+                            service_start=tickets['date_joined'],
+                            service_end=tickets['date_joined'],
+                            expiration_date=tickets['date_joined'],
                             currency=django_afip.CurrencyType(id=currency),
                             currency_quote=1,
                             # related_receipts
                         )
-                        print('creo instancia del comprobante')
-
                         # Guardo el comprobante
                         receipt.save()
-                        print('guardo instancia del comprobante')
-
                         # Genero comprobante
                         receipt.validate(None, True)
-                        print('generamos el comprobante')
-
                         # Relacionamos comprobante afip con comprobante propio
                         ticket.receipt_afip = django_afip.Receipt(id=receipt)
                         ticket.save()
-                        print('Guardo relacion de comprobantes')
-
-                    """
-                    elif action == 'search_client':
-                        data = []
-                        cli = Client.objects.filter(name__icontains=request.POST['term'])[0:10]
-                        for i in cli:
-                            item = i.toJSON()
-                            item['value'] = i.name
-                            data.append(item)
-                    """
             elif action == 'search_next_ticket_number':
                 tickets = json.loads(request.POST['tickets'])
                 next_number = Ticket.get_next_ticket_number(self, tickets['center'], tickets['voucher_type'])
