@@ -38,37 +38,17 @@ var tickets = {
             responsive: true,
             autoWidth: false,
             "language": {
-              "sProcessing":     "Procesando...",
-                            "sLengthMenu":     "Mostrar _MENU_ registros",
-                            "sZeroRecords":    "No se encontraron resultados",
-                            "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                            "sInfoPostFix":    "",
-                            "sSearch":         "Buscar:",
-                            "sUrl":            "",
-                            "sInfoThousands":  ",",
-                            "sLoadingRecords": "Cargando...",
-                            "oPaginate": {
-                                "sFirst":    "Primero",
-                                "sLast":     "Último",
-                                "sNext":     "Siguiente",
-                                "sPrevious": "Anterior"
-                            },
-                            "oAria": {
-                                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                            },
-                            "buttons": {
-                                "copy": "Copiar",
-                                "colvis": "Visibilidad"
-                            }
+              "sEmptyTable": "Ningún dato disponible en esta tabla",
+              "sLoadingRecords": "Cargando...",
+              "sSearch":         "Buscar:",
+              "sZeroRecords":    "No se encontraron resultados",
             }, // agregamos el idioma aquí ya que se recarga el DataTable en este codigo y pierde el idioma cargado en el template
-            "lengthMenu": [ 5, 10, 15, 20 ], // lo mismo que el lenguaje
             destroy: true,
             data: this.items.products,
             order: false, // para que respete el orden en que son elegidos desde el buscador
+            paging: false,
+            ordering: false,
+            info: false,
             columns: [
                 {"data": "id"},
                 {"data": "name"},
