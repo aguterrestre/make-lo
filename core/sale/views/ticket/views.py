@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, View
 from django.db import transaction
+from django.db.models import Q
 from django.template.loader import get_template
 from django.conf import settings
 
@@ -188,6 +189,14 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                 tickets = json.loads(request.POST['tickets'])
                 next_number = Ticket.get_next_ticket_number(self, tickets['center'], tickets['voucher_type'])
                 data = {'next_ticket_number': next_number}
+            elif action == 'search_clients':
+                data = []
+                term = request.POST['term']
+                clients = Client.objects.filter(
+                            Q(name__icontains=term) | Q(surname__icontains=term))[0:10]
+                for i in clients:
+                    item = i.toJSON()
+                    data.append(item)
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -199,7 +208,6 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
         context['favicon'] = Company.objects.get(pk=1)
         context['title'] = 'Creación de Venta'
         context['company'] = Company.objects.get(pk=1)
-        # context['create_url'] = reverse_lazy('erp:client_create')
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['dashboard_url'] = reverse_lazy('login:dashboard')

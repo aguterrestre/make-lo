@@ -182,44 +182,6 @@ $(function () {
       minDate: moment().format("YYYY-MM-DD")
     });
 
-    // buscador de productos
-    /*
-    $('input[name="search"]').autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: window.location.pathname,
-                type: 'POST',
-                data: {
-                    'action': 'search_products',
-                    'term': request.term
-                },
-                dataType: 'json',
-            }).done(function (data) {
-                //Cuando la respuesta es correcta
-                response(data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                // Si da error la respuesta
-                //alert(textStatus + ': ' + errorThrown);
-            }).always(function (data) {
-                //Se ejecuta siempre
-            });
-        },
-        delay: 500,
-        minLength: 1,
-        select: function (event, ui) {
-          //console.log(ui.item); para saber por consola los datos que tenemos al elegir un item del autocomplete
-          event.preventDefault(); // evento para detener la busqueda y seguir con el resto del code
-          console.clear(); // limpia la consola del navegador
-          ui.item.quantity = 1; // definimos manualmente la cantidad a visualizar en el detalle de venta
-          ui.item.subtotal = 0.00; // definimos manualmente el subtotal a visualizar en el detalle de venta
-          ui.item.options = ''; // definimos manualmente las opciones a visualizar en el detalle de venta
-          console.log(tickets.items); // vemos en consola lo que tiene la variable donde guardaremos la venta
-          tickets.add(ui.item); // llamamos al metodo add de la variable tickets
-          $(this).val(''); // limpia la busqueda
-        }
-    });
-    */
-
     // boton para eliminar todos los renglones del ticket
     $('button[name="buttonRemoveAll"]').on('click', function () {
         if (tickets.items.products.length === 0) return false;
@@ -318,6 +280,32 @@ $(function () {
         data.options = '';
         tickets.add(data);
         $(this).val('').trigger('change.select2');
+    });
+
+    // buscador de clientes
+    $('select[name="client"]').select2({
+        theme: "bootstrap4",
+        language: 'es',
+        allowClear: true,
+        ajax: {
+            delay: 250,
+            type: 'POST',
+            url: window.location.pathname,
+            data: function (params) {
+                var queryParameters = {
+                    term: params.term,
+                    action: 'search_clients'
+                }
+                return queryParameters;
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+        },
+        placeholder: 'Ingrese un nombre de cliente...',
+        minimumInputLength: 3,
     });
 
     // Selector de Punto de venta

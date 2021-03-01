@@ -262,13 +262,16 @@ class Client(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['full_name'] = (f"{self.name} {self.surname}")
+        item['full_name'] = self.get_full_name()
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         # item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         item['photo'] = self.get_photo()
-        item['text'] = (f"{self.name} {self.surname}")
+        item['text'] = self.get_full_name()  # plugin select2 entiende array de nombre text
         item['document_type'] = self.document_type.description
         return item
+
+    def get_full_name(self):
+        return (f"{self.name} {self.surname}")
 
     def get_photo(self):
         if self.photo:
