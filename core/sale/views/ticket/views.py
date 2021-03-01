@@ -93,12 +93,15 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
             action = request.POST['action']
             if action == 'search_products':
                 data = []
+                # Productos a excluir porque ya fueron seleccionados en el ticket
+                products_exclude = json.loads(request.POST['prod_exclude'])
+                # Producto ingresado en buscador
                 product_weight = request.POST['term']
                 # si ingreso busqueda de 13 caracteres y es pesable
                 if len(product_weight) == 13 and product_weight[0:2] == str(20):
                     prod = product_weight[2:6]  # obtengo id del producto
                     prods = Product.objects.filter(id__icontains=prod)  # filtro por id del producto
-                    for i in prods:
+                    for i in prods.exclude(id__in=products_exclude):
                         price_i = product_weight[6:10]  # obtengo la parte entera del precio del prod
                         price_d = product_weight[10:12]  # obtengo la parte decimal del prod
                         price = float(price_i + "." + price_d)  # armo el precio del producto
@@ -110,8 +113,10 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                 else:
                     prods = (Product.objects.filter(name__icontains=request.POST['term']) |
                              Product.objects.filter(barcode__icontains=request.POST['term']) |
-                             Product.objects.filter(id__icontains=request.POST['term']))[0:10]
-                    for i in prods:
+                             Product.objects.filter(id__icontains=request.POST['term']))
+                    # [0:10] esto no lo uso por el momento. al dividir el queryset lo debo hacer en ultima
+                    # instancia de la consulta
+                    for i in prods.exclude(id__in=products_exclude):
                         item = i.toJSON()
                         item['text'] = i.name  # parametro que recibe select2
                         item['quantity'] = 1

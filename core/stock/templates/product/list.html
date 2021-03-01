@@ -22,8 +22,12 @@
       <td>{{ product.name }}</td>
       <td>{{ product.barcode }}</td>
       <td>{{ product.final_price }}</td>
-      <td>{{ product.stock }}</td>
-      <td>{{ product.date_expiration }}</td>
+      {% if product.stock <= 0 %}
+          <td><span class="badge badge-danger">{{ product.stock }}</span></td>
+      {% else %}
+          <td><span class="badge badge-success">{{ product.stock }}</span></td>
+      {% endif %}
+      <td>{{ product.date_expiration|date:'d/m/Y' }}</td>
       <td>
         <img src="{{ product.get_image }}" class="img-fluid d-block mx-auto" style="width: 50px; height: 50px;">
       </td>

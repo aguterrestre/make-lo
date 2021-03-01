@@ -137,10 +137,21 @@ var tickets = {
                 });
             },
         });
+    },
+    get_products_exclude: function () {
+        /*
+        Funcion para obtener los productos que tengo que excluir al momento de hacer la busqueda
+        ya que estan seleccionados en el detalle
+        */
+        let product_exclude = []
+        $.each(this.items.products, function (key, value) {
+            product_exclude.push(value.id)
+        })
+        return product_exclude
     }
 };
 
-// Generador de contenido en el Slect2 de productos
+// Generador de contenido en el Select2 de productos
 function formatRepo(repo) {
     if (repo.loading) {
         return repo.text;
@@ -157,7 +168,8 @@ function formatRepo(repo) {
                         '<b>Nombre:</b> ' + repo.name + '<br>' +
                         '<b>Categoría:</b> ' + repo.categ.name + '<br>' +
                         '<b>Unid. Medida:</b> ' + repo.unit.name + '<br>' +
-                        '<b>Precio Final:</b> <span class="badge badge-warning">$' + repo.final_price + '</span>' +
+                        '<b>Precio Final:</b> <span class="badge badge-warning">$' + repo.final_price + '</span>' + '<br>' +
+                        '<b>Stock:</b> <span class="badge badge-secondary">' + repo.stock + ' ' + repo.unit.abbreviation + '</span>' +
                     '</p>' +
                 '</div>' +
             '</div>' +
@@ -260,7 +272,8 @@ $(function () {
             data: function (params) {
                 var queryParameters = {
                     term: params.term,
-                    action: 'search_products'
+                    action: 'search_products',
+                    prod_exclude: JSON.stringify(tickets.get_products_exclude())
                 }
                 return queryParameters;
             },
