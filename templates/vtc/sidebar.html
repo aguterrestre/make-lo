@@ -10,7 +10,7 @@
     </a>
     <div class="sidebar">
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
               <li class="nav-item">
                   <a href="{% url 'setting:company_update' company.id %}" class="nav-link
                     {% if request.resolver_match.url_name == 'company_update' %}
@@ -43,24 +43,42 @@
                       </p>
                   </a>
               </li>
-              <li class="nav-item">
-                  <a href="{% url 'sale:client_list' %}" class="nav-link
-                    {% if request.resolver_match.url_name == 'client_list' %}
-                      active
-                    {% elif request.resolver_match.url_name == 'client_create' %}
-                      active
-                    {% elif request.resolver_match.url_name == 'client_update' %}
-                      active
-                    {% elif request.resolver_match.url_name == 'client_delete' %}
-                      active
-                    {% elif request.resolver_match.url_name == 'client_report' %}
-                      active
+              <!-- Opción -->
+              <li class="nav-item has-treeview
+                  {% if request.path|slice:':13' == '/sale/client/' %}
+                      menu-open
+                  {% elif request.path|slice:':29' == '/client_current_account/list/' %}
+                      menu-open
+                  {% endif %}">
+                  <a href="#" class="nav-link
+                    {% if request.path|slice:':13' == '/sale/client/' %}
+                        active
+                    {% elif request.path|slice:':29' == '/client_current_account/list/' %}
+                        active
                     {% endif %}">
-                      <i class="nav-icon fas fa-users"></i>
-                      <p>
-                          Clientes
-                      </p>
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Clientes</p>
                   </a>
+                  <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                          <a href="{% url 'sale:client_list' %}" class="nav-link
+                          {% if request.path|slice:':13' == '/sale/client/' %}
+                            active
+                          {% endif %}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Padrón Clientes</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="{% url 'client_current_account:client_current_account_list' %}" class="nav-link
+                          {% if request.path|slice:':29' == '/client_current_account/list/' %}
+                            active
+                          {% endif %}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Cuenta Corriente</p>
+                          </a>
+                        </li>
+                  </ul>
               </li>
               <li class="nav-item">
                   <a href="{% url 'stock:product_list' %}" class="nav-link

@@ -1,0 +1,9 @@
+from django.urls import path
+from core.client_current_account import views
+
+app_name = 'client_current_account'
+
+urlpatterns = [
+    # client_current_account
+    path('list/', views.ClientCurrentAccountListView.as_view(), name='client_current_account_list'),
+]

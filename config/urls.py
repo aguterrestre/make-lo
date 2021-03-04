@@ -17,6 +17,7 @@ urlpatterns = [
     path('purchase/', include('core.purchase.urls')),
     path('money/', include('core.money.urls')),
     path('setting/', include('core.setting.urls')),
+    path('client_current_account/', include('core.client_current_account.urls')),
 ]
 
 # Para servir los archivos media en modo desarrollo

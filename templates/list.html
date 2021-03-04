@@ -17,6 +17,9 @@
           </h3>
       </div>
       <div class="card-body">
+          {% block form_filters %}
+
+          {% endblock %}
           <table class="table" id="table_id">
               <thead>
               {% block columns %}

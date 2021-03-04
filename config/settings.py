@@ -30,10 +30,13 @@ INSTALLED_APPS = [
     'core.setting',
     'core.purchase',
     'core.money',
+    'core.client_current_account',
     # django tweaks
     'widget_tweaks',
     # django afip
     'django_afip',
+    # django_filters
+    'django_filters',
 ]
 
 MIDDLEWARE = [
