@@ -24,7 +24,7 @@
             </div>
             <div class="col-sm-1">
               <div class="form-group">
-                  <button type="submit" class="form-control btn-sm btn-success">
+                  <button type="submit" class="form-control btn-sm btn-success" name="btnFilter">
                       Filtrar
                   </button>
               </div>
@@ -45,20 +45,45 @@
 {% endblock %}
 
 {% block rows %}
-  {% for ticket in object_list %}
-    <tr>
-      <td>{{ ticket.ticket.id }}</td>
-      <td>{{ ticket.ticket }}</td>
-      <td>{{ ticket.ticket.date_joined|date:'d/m/Y' }}</td>
-      <td>${{ ticket.ticket.total }}</td>
-      <td>${{ ticket.balance }}</td>
-      <td>{{ ticket.get_status_display }}</td>
-    </tr>
-  {% endfor %}
+    {% for ticket in object_list %}
+        <tr>
+            <td>{{ ticket.ticket.id }}</td>
+            <td>{{ ticket.ticket }}</td>
+            <td>{{ ticket.ticket.date_joined|date:'d/m/Y' }}</td>
+            <td>{{ ticket.ticket.total }}</td>
+            <td>{{ ticket.balance }}</td>
+            <td>{{ ticket.get_status_display }}</td>
+        </tr>
+    {% endfor %}
 {% endblock %}
 
 {% block buttons_list %}
 
+{% endblock %}
+
+{% block footer %}
+    <div class="bg-gray mt-1">
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-3">
+                <h3 class="mb-0" style="text-align:center">
+                    Total:
+                    <input style="width:150px; text-align:right; background-color:#6c757d; border:0px; color:white" type="text" name="totalTicket" value="$0,0000" readonly>
+                </h3>
+            </div>
+
+            <div class="col-sm-3">
+                <h3 class="mb-0" style="text-align:center">
+                    Saldo:
+                    <input style="width:150px; text-align:right; background-color:#6c757d; border:0px; color:white" type="text" name="balanceTicket" value="$0,0000" readonly>
+                </h3>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+    </div>
+    <br>
 {% endblock %}
 
 {% block javascript %}
@@ -77,6 +102,26 @@
           ordering: false,
           info: false,
           searching: false,
+          columnDefs: [
+              {
+                  targets: [3, 4],
+                  orderable: false,
+                  render: function (data, type, row) {
+                      let n = parseFloat(data).toFixed(4)
+                      return '$' + n.toString().replace('.',',')
+                  }
+              },
+          ],
+          footerCallback: function ( row, data, start, end, display ) {
+              total = this.api().column(3).data().reduce(function (a, b) {
+                            return parseFloat(a) + parseFloat(b);
+                        }, 0 ).toFixed(4);
+              balance = this.api().column(4).data().reduce(function (a, b) {
+                            return parseFloat(a) + parseFloat(b);
+                        }, 0 ).toFixed(4);
+              $('input[name="totalTicket"]').val('$' + total.toString().replace('.',','));
+              $('input[name="balanceTicket"]').val('$' + balance.toString().replace('.',','));
+          }
         });
 
         // Buscador de clientes

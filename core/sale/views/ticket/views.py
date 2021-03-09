@@ -14,11 +14,10 @@ from django.conf import settings
 from django_afip import models as django_afip
 from django_afip import pdf
 
+from core.client_current_account.models import ClientCurrentAccount
 from core.sale.models import Ticket, Ticket_Detail, Client, Sale_Condition
 from core.sale.forms import TicketForm
-
 from core.stock.models import Product
-
 from core.setting.models import Company
 
 import json
@@ -47,7 +46,6 @@ class TicketListView(LoginRequiredMixin, ListView):
                     item = i.toJSON()
                     item['options'] = ''
                     data.append(item)
-                    # data.append(i.toJSON())
             elif action == 'search_details_prod':
                 data = []
                 for i in Ticket_Detail.objects.filter(ticket=request.POST['id']):
@@ -76,7 +74,7 @@ class TicketListView(LoginRequiredMixin, ListView):
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
     """
-    Clase para crear un nuevo ticket.
+    Vista para registrar un nuevo ticket.
     """
     model = Ticket
     form_class = TicketForm
@@ -123,8 +121,11 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         data.append(item)
             elif action == 'add':
                 with transaction.atomic():
+                    # Obtenemos los datos que vienen desde el frontend
                     tickets = json.loads(request.POST['tickets'])
+                    # Creamos instancia de la clase Ticket
                     ticket = Ticket()
+                    # Guardamos cabecera de ticket
                     ticket.client = Client(id=(tickets['client']))
                     ticket.letter = tickets['letter']
                     ticket.center = django_afip.PointOfSales(id=tickets['center'])
@@ -139,6 +140,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                     J = 0  # Para contabilizar el número de renglones al guardar el detalle del ticket
                     for i in tickets['products']:
                         J += 1
+                        # Guardamos los renglones del ticket
                         ticket_detail = Ticket_Detail()
                         ticket_detail.ticket = Ticket(id=ticket.id)
                         ticket_detail.row_numer = J
@@ -153,6 +155,13 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         product = Product.objects.get(pk=p['id'])
                         product.stock = float(product.stock) - float(p['quantity'])
                         product.save()
+                    # Guardamos el comprobante en cuenta corriente
+                    if tickets['sale_condition'] == '2':  # hardcode
+                        current_account = ClientCurrentAccount()
+                        current_account.ticket = Ticket(id=ticket.id)
+                        current_account.balance = float(tickets['total'])
+                        current_account.status = 'owed'
+                        current_account.save()
                     # Generamos comprobante en AFIP
                     center = django_afip.PointOfSales.objects.get(pk=tickets['center'])
                     if center.issuance_type != 'COMUN':

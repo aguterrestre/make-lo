@@ -50,13 +50,14 @@ $(function () {
             {"data": "client.full_name"},
             {"data": "ticket_number"},
             {"data": "date_joined"},
+            {"data": "sale_condition.name"},
             {"data": "validated"},
             {"data": "total"},
             {"data": "options"},
         ],
         columnDefs: [
             {
-                targets: [4],
+                targets: [5],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -70,7 +71,7 @@ $(function () {
                 }
             },
             {
-                targets: [5],
+                targets: [6],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -78,7 +79,7 @@ $(function () {
                 }
             },
             {
-                targets: [6],
+                targets: [7],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -91,9 +92,6 @@ $(function () {
                 }
             },
         ],
-        initComplete: function (settings, json) {
-
-        }
     });
 
     $('#table_id tbody')
@@ -175,6 +173,7 @@ $(function () {
             $('#modal_ticket_detail').modal('show');
         })
         .on('click', 'a[rel="ticket_validated_afip"]', function () {
+            // Sin desarrollar
             alert('Validando en AFIP')
         })
 });

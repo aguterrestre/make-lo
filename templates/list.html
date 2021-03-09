@@ -34,9 +34,12 @@
           </table>
       </div>
       <div class="card-footer">
-        <a href="{{ create_url }}" class="btn btn-success btn-flat">
-            <i class="fas fa-plus"></i> {{ btn_new_detail }}
-        </a>
+          {% block footer %}
+
+          {% endblock %}
+          <a href="{{ create_url }}" class="btn btn-success btn-flat">
+              <i class="fas fa-plus"></i> {{ btn_new_detail }}
+          </a>
           {% block buttons_list %}
 
           {% endblock %}

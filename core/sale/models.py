@@ -153,12 +153,13 @@ class City(models.Model):
 
 class Sale_Condition(models.Model):
     """
-    Tabla para guardar las condiciones de ventas al momento de generar un comprobante.
+    Modelo para administrar las condiciones de ventas de un comprobante.
     Ejemplo:
             1	Contado
             2	Cuenta Corriente
             3	A 30 dias
             etc.
+    internal_code: debería ser un choices para tener definido los tipos de condición y evitar hardcode
     """
     # id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, verbose_name='Nombre')
@@ -343,6 +344,7 @@ class Ticket(models.Model):
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
         item['det'] = [i.toJSON() for i in self.ticket_detail_set.all()]
         item['validated'] = self.get_toJSON_receipt_afip()
+        item['sale_condition'] = self.sale_condition.toJSON()
         return item
 
     def get_toJSON_receipt_afip(self):
