@@ -2,7 +2,7 @@ from django.forms import Select
 
 from django_filters import FilterSet, ChoiceFilter, ModelChoiceFilter
 
-from .models import ClientCurrentAccount
+from .models import ClientCurrentAccount, ClientReceipt
 from core.sale.models import Client
 
 
@@ -25,4 +25,24 @@ class ClientCurrentAccountFilter(FilterSet):
 
     class Meta:
         model = ClientCurrentAccount
+        fields = []
+
+
+class ClientReceiptFilter(FilterSet):
+    """ Filtro de recibos de cliente """
+
+    status = ChoiceFilter(choices=ClientReceipt.STATUS_CLIENT_RECEIPT, widget=Select(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%',
+            'autocomplete': 'off',
+    }))
+
+    client = ModelChoiceFilter(queryset=Client.objects.all(), widget=Select(attrs={
+            'class': 'form-control select2',
+            'style': 'width: 100%',
+            'autocomplete': 'off'
+    }))
+
+    class Meta:
+        model = ClientReceipt
         fields = []

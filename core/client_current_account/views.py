@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 
 from django_filters.views import FilterView
-from .filters import ClientCurrentAccountFilter
+from .filters import ClientCurrentAccountFilter, ClientReceiptFilter
 
-from .models import ClientCurrentAccount
+from .models import ClientCurrentAccount, ClientReceipt
 from core.sale.models import Client
 from core.setting.models import Company
 
@@ -53,6 +53,54 @@ class ClientCurrentAccountListView(LoginRequiredMixin, FilterView):
         context['company'] = Company.objects.get(pk=1)
         context['list_url'] = reverse_lazy('client_current_account:client_current_account_list')
         context['entity'] = 'Cuenta Corriente Cliente'
+        context['dashboard_url'] = reverse_lazy('login:dashboard')
+        context['create_url'] = reverse_lazy('sale:client_create')
+        context['btn_new_detail'] = 'Nuevo Recibo'
+        return context
+
+
+class ClientReceiptListView(LoginRequiredMixin, FilterView):
+    """
+    Vista para listado de recibos de clientes.
+    Se usan filtros a través de la librería django_filter.
+    """
+    model = ClientReceipt
+    template_name = 'client_receipt/list.html'
+    filterset_class = ClientReceiptFilter
+
+    def get_queryset(self):
+        filter = self.request.GET.get('client')
+        if filter is None or filter == '':
+            # Si no ingresa cliente no realiza el filtro
+            return ClientCurrentAccount.objects.none()
+
+        return super().get_queryset()
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = self.request.POST['action']
+            if action == 'search_clients':
+                data = []
+                term = request.POST['term']
+                clients = Client.objects.filter(
+                            Q(name__icontains=term) | Q(surname__icontains=term))[0:10]
+                for i in clients:
+                    item = i.toJSON()
+                    data.append(item)
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = e
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['favicon'] = Company.objects.get(pk=1)
+        context['title'] = 'Recibo de Cliente'
+        context['company'] = Company.objects.get(pk=1)
+        context['list_url'] = reverse_lazy('client_current_account:client_receipt_list')
+        context['entity'] = 'Recibo Cliente'
         context['dashboard_url'] = reverse_lazy('login:dashboard')
         context['create_url'] = reverse_lazy('sale:client_create')
         context['btn_new_detail'] = 'Nuevo Recibo'

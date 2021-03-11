@@ -1,0 +1,155 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head %}
+    <!-- Plugins para Select2 -->
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+{% endblock %}
+
+{% block form_filters %}
+    <form method='get'>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    {{ filter.form.client }}
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    {{ filter.form.status }}
+                </div>
+            </div>
+            <div class="col-sm-1">
+              <div class="form-group">
+                  <button type="submit" class="form-control btn-sm btn-success" name="btnFilter">
+                      Filtrar
+                  </button>
+              </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block columns %}
+  <tr>
+      <th scope="col" style="width: 10%;">Código</th>
+      <th scope="col" style="width: 20%;">Número</th>
+      <th scope="col" style="width: 20%;">Fecha</th>
+      <th scope="col" style="width: 15%;">Total</th>
+      <th scope="col" style="width: 15%;">Saldo</th>
+      <th scope="col" style="width: 10%;">Situación</th>
+  </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for receipt in object_list %}
+        <tr>
+            <td>{{ receipt.id }}</td>
+            <td>{{ receipt }}</td>
+            <td>{{ receipt.date_joined|date:'d/m/Y' }}</td>
+            <td>{{ receipt.total }}</td>
+            <td>{{ receipt.balance }}</td>
+            <td>{{ receipt.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block buttons_list %}
+
+{% endblock %}
+
+{% block footer %}
+    <div class="bg-gray mt-1">
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-3">
+                <h3 class="mb-0" style="text-align:center">
+                    Total:
+                    <input style="width:150px; text-align:right; background-color:#6c757d; border:0px; color:white" type="text" name="totalReceipt" value="$0,0000" readonly>
+                </h3>
+            </div>
+
+            <div class="col-sm-3">
+                <h3 class="mb-0" style="text-align:center">
+                    Saldo:
+                    <input style="width:150px; text-align:right; background-color:#6c757d; border:0px; color:white" type="text" name="balanceReceipt" value="$0,0000" readonly>
+                </h3>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+    </div>
+    <br>
+{% endblock %}
+
+{% block javascript %}
+  <!-- DataTable 1.10.20 -->
+  <script type="application/javascript">
+    $(document).ready( function () {
+        // Configuración de datatalbe
+        $('#table_id').DataTable({
+          responsive: true,
+          autoWidth: false,
+          "language": {
+              url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'
+          },
+          "lengthMenu": [ 5, 10, 15, 20 ],
+          paging: false,
+          ordering: false,
+          info: false,
+          searching: false,
+          columnDefs: [
+              {
+                  targets: [3, 4],
+                  orderable: false,
+                  render: function (data, type, row) {
+                      let n = parseFloat(data).toFixed(4)
+                      return '$' + n.toString().replace('.',',')
+                  }
+              },
+          ],
+          footerCallback: function ( row, data, start, end, display ) {
+              total = this.api().column(3).data().reduce(function (a, b) {
+                            return parseFloat(a) + parseFloat(b);
+                        }, 0 ).toFixed(4);
+              balance = this.api().column(4).data().reduce(function (a, b) {
+                            return parseFloat(a) + parseFloat(b);
+                        }, 0 ).toFixed(4);
+              $('input[name="totalReceipt"]').val('$' + total.toString().replace('.',','));
+              $('input[name="balanceReceipt"]').val('$' + balance.toString().replace('.',','));
+          }
+        });
+
+        // Buscador de clientes
+        $('select[name="client"]').select2({
+            theme: "bootstrap4",
+            language: 'es',
+            allowClear: true,
+            ajax: {
+                delay: 250,
+                type: 'POST',
+                url: window.location.pathname,
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                data: function (params) {
+                    var queryParameters = {
+                        term: params.term,
+                        action: 'search_clients'
+                    }
+                    return queryParameters;
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+            },
+            placeholder: 'Ingrese un nombre de cliente...',
+            minimumInputLength: 3,
+        });
+    });
+  </script>
+{% endblock %}
