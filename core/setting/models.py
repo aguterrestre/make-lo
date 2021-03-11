@@ -5,13 +5,10 @@ from django.conf import settings
 from django_afip import models as django_afip
 
 from core.sale.models import City
-from core.sale.choices.ticket.choices import LETTER_CHOICESS
 
 
 class Company(models.Model):
-    """
-    Modelo para administrar los datos de empresa.
-    """
+    """ Modelo para administrar los datos de empresa """
     name = models.CharField(max_length=150, verbose_name='Nombre')
     address = models.CharField(max_length=200, default='', blank=True, verbose_name='Dirección')
     contact_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Contacto')
@@ -21,9 +18,6 @@ class Company(models.Model):
     document_type = models.ForeignKey(django_afip.DocumentType, null=True, on_delete=models.PROTECT,
                                       default=1, verbose_name='Tipo documento')
     document = models.CharField(max_length=25, default='', verbose_name='Número documento')
-    letter = models.CharField(max_length=1, choices=LETTER_CHOICESS, default='c', verbose_name='Letra')
-    center = models.PositiveIntegerField(verbose_name='Centro')
-    number = models.PositiveIntegerField(verbose_name='Número')
     image_login = models.ImageField(upload_to='setting/company_image_login/%Y/%m/%d',
                                     null=True, blank=True, max_length=150,
                                     verbose_name='Foto para Inicio de sesión')
