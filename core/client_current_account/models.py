@@ -23,6 +23,7 @@ class ClientCurrentAccount(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self, exclude=['ticket'])
+        item['ticket'] = self.ticket.toJSON()
         item['status'] = self.get_status_display()
         return item
 
@@ -46,7 +47,7 @@ class ClientReceipt(models.Model):
     total = models.DecimalField(max_digits=12, decimal_places=4, verbose_name='Total')
     balance = models.DecimalField(max_digits=12, decimal_places=4, verbose_name='Saldo')
     status = models.CharField(max_length=10, choices=STATUS_CLIENT_RECEIPT, verbose_name='Situación')
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT, verbose_name='Cliente')
     date_joined = models.DateField(default=datetime.now, verbose_name='Fecha')
     letter = models.CharField(max_length=1, default='X', verbose_name='Letra')
     center = models.PositiveIntegerField(default=1, verbose_name='Punto de Cobro')
@@ -81,13 +82,13 @@ class ClientReceiptDetail(models.Model):
     Modelo para administrar los renglones de recibo de cliente.
     Aquí se mantendrá la relación entre recibo y comprobante de venta.
     """
-    client_receipt = models.ForeignKey(ClientReceipt, on_delete=models.PROTECT)
-    ticket_receipt = models.ForeignKey(Ticket, on_delete=models.PROTECT)
+    client_receipt = models.ForeignKey(ClientReceipt, on_delete=models.PROTECT, verbose_name='Recibo')
+    ticket_receipt = models.ForeignKey(ClientCurrentAccount, on_delete=models.PROTECT,
+                                       verbose_name='Comprobante')
     total = models.DecimalField(max_digits=12, decimal_places=4, verbose_name='Importe afectación')
 
     def __str__(self):
-        return ("C-0031-00000001")
-        # return ("{}-{:04d}-{:08d}".format(self.get_letter_display(), self.center.number, self.number))
+        return self.client_receipt
 
     def toJSON(self):
         item = model_to_dict(self, exclude=['client_receipt', 'ticket_receipt'])
