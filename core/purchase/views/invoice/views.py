@@ -173,7 +173,7 @@ class InvoiceCreatePDFView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         try:
-            template = get_template('invoice/createpdf0.html')
+            template = get_template('invoice/createpdf.html')
             context = {
                 'invoice': Invoice.objects.get(pk=self.kwargs['pk']),
                 'company': Company.objects.get(pk=1)

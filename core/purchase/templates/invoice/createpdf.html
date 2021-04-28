@@ -45,32 +45,25 @@
         </style>
     </head>
     <body>
-      <div>
-        <div>
-          <img src="{{ company.get_photo_image_ticket }}" class="img-invoice" alt="">
-          <div >
-            <b>{{ company.name }}</b>
-          </div>
-        </div>
-      </div>
-      <br>
+      <img src="{{ company.get_photo_image_ticket_url }}" class="img-invoice" alt="">
       <table id="invoice">
         <tbody>
           <tr>
               <td style="width: 60%; text-align: left;">
+                <b>{{ company.name|upper }}</b><br>
                 <b>Apellido y Nombre / Razón Social:</b> {{ invoice.provider|upper }}<br>
                 <b>Domicilio:</b> {{ invoice.provider.address }} - {{ invoice.provider.residence_city }},
                 {{ invoice.provider.residence_city.province.name }},
                 {{ invoice.provider.residence_city.province.country.name }}<br>
                 <b>Condición frente al IVA:</b> {{ invoice.provider.fiscal_condition.name }}<br>
-                <b>Condición de Compra:</b> {{ invoice.purchase_condition.name }}
+                <b>CUIT:</b> {{ invoice.provider.document }}<br>
               </td>
               <td style="width: 30%;"></td>
               <td style="width: 60%; text-align: left;">
                 <b>FACTURA DE COMPRA</b><br>
                 <b>Comprobante:</b> {{ invoice }}<br>
                 <b>Fecha de Emisión:</b> {{ invoice.date_joined }}<br>
-                <b>CUIT:</b> {{ invoice.provider.document }}<br>
+                <b>Condición de Compra:</b> {{ invoice.purchase_condition.name }}
               </td>
               <td style="width: 20%;"></td>
           </tr>
