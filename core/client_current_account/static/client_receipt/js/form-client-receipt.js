@@ -1,3 +1,5 @@
+// Ver https://es.stackoverflow.com/questions/314935/datatables-jquery-obtener-fila-seleccionada-por-un-checkbox
+
 let tableReceipt;
 var receipt = {
     items: {
@@ -11,51 +13,13 @@ var receipt = {
         number: 1  // Numero 1
     },
     calculateTotal: function () {
-        // let total = 0.0000;
+        let total = 0.0000
+        $.each(this.items.tickets, function (pos, dict) {
+            total += dict.balance
+        })
+        this.items.total = total
 
-        // Recorremos todos los componentes checkbox que estan seleccionados
-        tableReceipt.rows().every(function(){
-            ticket_curret_account = this.data()
-        });
-
-        $('input[name="total"]').val(ticket_curret_account.balance);
-
-        // $('#table_client_receipt tbody tr td').each( function () {
-        //     console.log($(this).html());
-        //     $(this).find("td").each( function () {
-        //         console.log($(this));
-        //         let price = parseFloat($(this).val());
-        //         var tr = tableTicketForm.cell($(this).closest('td, li')).index();
-        //         tickets.items.products[tr.row].final_price = price;
-        //         tickets.calculate_ticket();
-        //         $('td:eq(5)', tableTicketForm.row(tr.row).node()).html('$' + tickets.items.products[tr.row].subtotal.toFixed(4));
-        //     })
-        // });
-
-        // var result = [];
-        // var i = 0;
-        // // para cada checkbox "chequeado"
-        // $("input[type=checkbox]:checked").each(function(){
-        //
-        //   // buscamos el td más cercano en el DOM hacia "arriba"
-        //   // luego encontramos los td adyacentes a este
-        //   $(this).closest('td').siblings().each(function(){
-        //
-        //     // obtenemos el texto del td
-        //     result[i] = $(this).text();
-        //     ++i;
-        //   });
-        // });
-        //
-        // console.log(result.join(' '));
-
-        // $.each(this.items.tickets, function (pos, dict) {
-        //     total += dict.balance
-        // });
-        //
-        // this.items.total = total
-        //
-        // $('input[name="total"]').val(this.items.total.toFixed(4));
+        $('input[name="total"]').val(this.items.total.toFixed(4));
     },
     add: function (item) {
         // agregamos a la estructura el/los ticket elegido
@@ -69,7 +33,6 @@ var receipt = {
             "language": {
               "sEmptyTable": "Ningún dato disponible en esta tabla",
               "sLoadingRecords": "Cargando...",
-              "sSearch":         "Buscar:",
               "sZeroRecords":    "No se encontraron resultados",
             }, // agregamos el idioma aquí ya que se recarga el DataTable en este codigo y pierde el idioma cargado en el template
             destroy: true,
@@ -164,13 +127,16 @@ $(function () {
 
     // eventos de la tabla que contiene los comprobantes adeudados
     $('#table_client_receipt tbody')
-        // campo saldo de los ticket adeudados
-        .on('change', 'input[name="balance"]', function () {
-            let balance = parseFloat($(this).val());
-            var tr = tableReceipt.cell($(this).closest('td, li')).index();
-            receipt.items.tickets[tr.row].balance = balance;
-            receipt.calculateTotal();
-        });
+    .on('change', 'input[name="balance"]', function () {
+        // Actualizamos el balance del ticket en la estructura de datos
+        let balance = parseFloat($(this).val());
+        var tr = tableReceipt.cell($(this).closest('td, li')).index();
+        receipt.items.tickets[tr.row].balance = balance;
+        receipt.calculateTotal();
+    })
+    .on('change', 'input[type=checkbox]', function () {
+        // Actualizamos el balance del ticket en la estructura de datos
+    });
 
     // evento submit del boton guardar
     $('form').on('submit', function (e) {
@@ -191,6 +157,7 @@ $(function () {
         };
 
         // mostramos mjs informando al usuario que registrará un recibo a cuenta
+        // **** Falta controlar cuando queda un monto del recibo sin afectar, sería una parte a cuenta ****
         if (receipt.items.tickets.length === 0) {
             const text_mjs = "No ha seleccionado ningún comprobante a pagar. El recibo será registrado en la cuenta del cliente."
             Swal.fire({
@@ -270,15 +237,16 @@ $(function () {
     $('#selected_all').click(function() {
       if (selected) {
         $('#table_client_receipt input[type=checkbox]').prop("checked", true);
-        // Llamamos a funcion para calcular total
-        receipt.calculateTotal()
       } else {
         $('#table_client_receipt input[type=checkbox]').prop("checked", false);
-        //  Mostramos en pantalla el valor cero
-        $('input[name="total"]').val('0.0000');
       }
       selected = !selected;
+      addTicket()
     });
+
+    // agrega los tickets seleccionados a estructura de procesamiento
+    function addTicket() {
+    };
 
     // hacemos foco en el buscador de clientes
     document.getElementById("client").focus();
