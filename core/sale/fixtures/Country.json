@@ -1,0 +1,12 @@
+[
+    {
+        "model": "sale.country",
+        "pk": 1,
+        "fields": {
+            "name": "Argentina",
+            "fiscal_code": "200",
+            "fiscal_name": "ARG",
+            "document": "50000002000"
+        }
+    }
+]

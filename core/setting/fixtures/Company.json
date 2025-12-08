@@ -1,0 +1,14 @@
+[
+    {
+        "model": "setting.company",
+        "pk": 1,
+        "fields": {
+            "name": "Empresa",
+            "address": "Sin Definir",
+            "contact_email": "test@test.com.ar",
+            "document": "99999999",
+            "document_IIBB": "99999",
+            "date_activity_start": "2014-01-31"
+        }
+    }
+]
