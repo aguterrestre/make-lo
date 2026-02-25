@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <style>
+            .img-invoice {
+                width: 50px;
+                text-align: left;
+                margin: 0 auto;
+            }
+
+            .head {
+                text-align: left;
+                text-transform: uppercase;
+            }
+
+            .head-2 {
+                text-align: right;
+                text-transform: uppercase;
+            }
+
+            #invoice thead tr th {
+                text-align: left;
+                border-bottom: 1px solid black;
+                border-top: 1px solid black;
+                padding-top: 4px;
+            }
+
+            #invoice thead tr {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            #invoice tbody tr {
+                padding: 0;
+            }
+
+            .text-center{
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+      <img src="{{ company.get_photo_image_ticket_url }}" class="img-invoice" alt="">
+      <table id="invoice">
+        <tbody>
+          <tr>
+              <td style="width: 60%; text-align: left;">
+                <b>{{ company.name|upper }}</b><br>
+                <b>Apellido y Nombre / Razón Social:</b> {{ invoice.provider|upper }}<br>
+                <b>Domicilio:</b> {{ invoice.provider.address }} - {{ invoice.provider.residence_city }},
+                {{ invoice.provider.residence_city.province.name }},
+                {{ invoice.provider.residence_city.province.country.name }}<br>
+                <b>Condición frente al IVA:</b> {{ invoice.provider.fiscal_condition.name }}<br>
+                <b>CUIT:</b> {{ invoice.provider.document }}<br>
+              </td>
+              <td style="width: 30%;"></td>
+              <td style="width: 60%; text-align: left;">
+                <b>FACTURA DE COMPRA</b><br>
+                <b>Comprobante:</b> {{ invoice }}<br>
+                <b>Fecha de Emisión:</b> {{ invoice.date_joined }}<br>
+                <b>Condición de Compra:</b> {{ invoice.purchase_condition.name }}
+              </td>
+              <td style="width: 20%;"></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <table id="invoice">
+          <thead>
+            <tr>
+                <th style="width: 55%;">PRODUCTO</th>
+                <th style="width: 10%; text-align: center;">CANTIDAD</th>
+                <th style="width: 20%; text-align: center;">PRECIO</th>
+                <th style="width: 20%; text-align: right;">SUBTOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for det in invoice.invoice_detail_set.all %}
+              <tr {% if forloop.first %} style="padding-top: 3px;" {% endif %}>
+                  <td>{{ det.product.id }} - {{ det.product.name }}</td>
+                  <td class="text-center">{{ det.quantity }}</td>
+                  <td class="text-center">${{ det.final_price }}</td>
+                  <td style="text-align: right;">${{ det.subtotal }}</td>
+              </tr>
+            {% endfor %}
+            <tr style="border-top: 1px solid black; padding-top: 4px;">
+                <td colspan="4"><b>SUBTOTAL</b></td>
+                <td style="text-align: right">${{ invoice.subtotal }}</td>
+            </tr>
+            <tr style="padding-top: 0px;">
+                <td colspan="4"><b>IMPUESTO</b></td>
+                <td style="text-align: right">${{ invoice.total_tax }}</td>
+            </tr>
+            <tr style="padding-top: 0px;">
+                <td colspan="4"><b>TOTAL</b></td>
+                <td style="text-align: right">${{ invoice.total }}</td>
+            </tr>
+          </tbody>
+      </table>
+    </body>
+</html>

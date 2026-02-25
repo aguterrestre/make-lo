@@ -1,0 +1,11 @@
+[
+    {
+        "model": "sale.city",
+        "pk": 1,
+        "fields": {
+            "name": "Villa María",
+            "postcode": "5900",
+            "province": "1"
+        }
+    }
+]

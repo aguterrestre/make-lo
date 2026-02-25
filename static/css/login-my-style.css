@@ -1,18 +1,9 @@
 .login-page-img-background {
   background-color: #64756c;
-  /*background-image: url("/static/img/fondo_login_granel.jpg");*/
-  background-image: url("{{ company.get_photo_image_login }}");
-  background-size: cover;
+  background-image: url("/static/img/login_background.png");
+  /* background-image: url("{{ company.get_photo_image_login }}"); */
+  /* background-size: cover; */
   background-repeat: no-repeat;
-  background-position: 0% 35%;
-}
-.login-link-company {
-  /*background-color: #c2c5c7;
-  border-color: #c2c5c7;*/
-  background-color: #fff;
-  border-color: #fff;
-}
-.login-company {
-  color: #666;
-  font-size: 2,5rem;
+  background-attachment: fixed;
+  background-position: 45% 67%;
 }

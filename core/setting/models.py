@@ -9,6 +9,7 @@ from core.sale.models import City
 
 class Company(models.Model):
     """ Modelo para administrar los datos de empresa """
+
     name = models.CharField(max_length=150, verbose_name='Nombre')
     address = models.CharField(max_length=200, default='', blank=True, verbose_name='Dirección')
     contact_email = models.EmailField(max_length=254, blank=True, verbose_name='Email de Contacto')
@@ -56,6 +57,12 @@ class Company(models.Model):
             return '{}{}'.format(settings.MEDIA_URL, self.image_sidebar)
         return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
 
+    def get_photo_image_sidebar_url(self):
+        """ Metodo para retornar la url de la imagen """
+        if self.image_sidebar:
+            return self.image_sidebar.url
+        return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
+
     def get_photo_image_favicon(self):
         if self.image_favicon:
             return '{}{}'.format(settings.MEDIA_URL, self.image_favicon)
@@ -65,6 +72,12 @@ class Company(models.Model):
         if self.image_ticket:
             return '{}{}'.format(settings.MEDIA_URL, self.image_ticket)
         return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
+
+    def get_photo_image_ticket_url(self):
+        """ Metodo para retornar la url de la imagen """
+        if self.image_ticket:
+            return self.image_ticket.url
+        return self.image_ticket
 
     class Meta:
         verbose_name = 'Empresa'

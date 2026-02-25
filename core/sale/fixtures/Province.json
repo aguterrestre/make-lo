@@ -1,0 +1,11 @@
+[
+    {
+        "model": "sale.province",
+        "pk": 1,
+        "fields": {
+            "name": "Córdoba",
+            "fiscal_code": "3",
+            "country": "1"
+        }
+    }
+]

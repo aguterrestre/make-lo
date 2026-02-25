@@ -23,13 +23,15 @@
 </head>
 <body class="hold-transition login-page login-page-img-background">
   <div class="login-box">
-    <div class="login-logo login-link-company">
-      <a href="#">
-        <b class="login-company">{{ company }}</b>
-      </a>
-    </div>
-    <!-- /.login-logo -->
     <div class="card">
+      <div class="card-header text-center">
+          <a href="#">
+              <img src="{% static 'img/logo_makelo.png' %}" class="img-fluid" width="160" height="160">
+          </a>
+      </div>
+      <div class="card-header text-center">
+        <a href="#" class="h1"><b>{{ company }}</b></a>
+      </div>
       <div class="card-body login-card-body">
         <p class="login-box-msg">Inicie sesión para continuar</p>
         <form action="." method="post">

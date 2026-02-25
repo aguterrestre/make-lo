@@ -1,20 +1,7 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-pi=t!i$zqc_a=h2z2u0n@^jhm-wtnm^c$*@2^(qy%+1zst#z!'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -70,21 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'desarrollo',
-        # 'NAME': 'make-lobase',
-        'USER': 'postgres',
-        'PASSWORD': 'SanLore10$$',
-        'HOST': '127.0.0.1',
-        'DATABASE_PORT': '5432',
-    }
-}
 
-
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,9 +74,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-
-# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'es-us'
 
 TIME_ZONE = 'UTC'
@@ -115,13 +85,10 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-# Definimos donde estarán los archivos estaticos para servirlos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
-# Definimos donde buscará los archivos estaticos
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -131,7 +98,7 @@ LOGIN_REDIRECT_URL = '/login/dashboard/'
 
 # url que se dirige cuando se hace logout
 # No la vamos a usar. De esta manera resuelvo el logout en backends django
-#  LOGOUT_REDIRECT_URL = '/login/'
+# LOGOUT_REDIRECT_URL = '/login/'
 
 # url que se dirige cuando el usuario no esta logeado y se intenta acceder
 # a una url distinta del login
@@ -142,3 +109,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # URL absoluta de los archivos media.
 MEDIA_URL = '/media/'
+
+# Configuración según entorno de trabajo
+if os.environ.get('PRODUCTION') is None:
+    from .local_settings import *
+else:
+    from .production_settings import *

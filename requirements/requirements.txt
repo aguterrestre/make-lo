@@ -18,7 +18,7 @@ django-renderpdf==3.0.0
 django-widget-tweaks==1.4.8
 entrypoints==0.3
 flake8==3.7.9
-freeze==3.0
+# freeze==3.0  # Comentado: paquete no disponible en PyPI
 html5lib==1.1
 idna==2.10
 isodate==0.6.0

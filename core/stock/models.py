@@ -102,9 +102,8 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """
-    Tabla para guardar los productos.
-    """
+    """ Modelo para administrar productos """
+
     id = models.CharField(primary_key=True, max_length=25, verbose_name='Código')
     name = models.CharField(max_length=150, default='', verbose_name='Nombre')
     barcode = models.CharField(max_length=150, default='', verbose_name='Código de barra')
@@ -126,9 +125,9 @@ class Product(models.Model):
     date_update = models.DateTimeField(auto_now=True, null=True, blank=True)
     category = models.ForeignKey(Category, default=1, on_delete=models.PROTECT, verbose_name='Categoría')
     # image = models.ForeignKey(Product_Image, on_delete=models.PROTECT,
-    #                           default=1, verbose_name='Imágen')
+    #                           default=1, verbose_name='Imagen')
     image = models.ImageField(upload_to='stock/product/%Y/%m/%d', null=True,
-                              blank=True, max_length=150, verbose_name='Imágen')
+                              blank=True, max_length=150, verbose_name='Imagen')
     unit = models.ForeignKey(Unit_Measure, on_delete=models.PROTECT, default=1,
                              verbose_name='Unidad de medida')
     tax = models.ForeignKey(Tax_IVA, on_delete=models.PROTECT, default=1, verbose_name='Condición de IVA')
@@ -143,6 +142,7 @@ class Product(models.Model):
         item = model_to_dict(self)
         item['categ'] = self.category.toJSON()
         item['image'] = self.get_image()
+        item['image_url'] = self.get_image_url()
         item['unit'] = self.unit.toJSON()
         item['text'] = self.name
         return item
@@ -150,6 +150,12 @@ class Product(models.Model):
     def get_image(self):
         if self.image:
             return '{}{}'.format(settings.MEDIA_URL, self.image)
+        return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
+
+    def get_image_url(self):
+        """ Metodo para retornar la url de la imagen """
+        if self.image:
+            return self.image.url
         return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
 
     def save(self,  *args, **kwargs):
