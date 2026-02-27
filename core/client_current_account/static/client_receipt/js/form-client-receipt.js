@@ -181,8 +181,8 @@ $(function () {
         parameters.append('receipt', JSON.stringify(receipt.items));
         submit_with_ajax(window.location.pathname, 'Registrar Recibo', '¿Estas seguro de registrar el recibo de venta?',
          parameters, function (response) {
-           alert_action_ticket('Visualizar PDF', '¿Desea ver el recibo de venta en formato PDF?', function () {
-              // window.open('/client_current_account/receipt/pdf/add/' + response.id + '/', '_blank');
+           alert_action_ticket('Visualizar PDF', '¿Desea ver el recibo en formato PDF?', function () {
+              window.open('/client_current_account/receipt/pdf/' + response.id + '/', '_blank');
               location.href = '/client_current_account/receipt/list/';
             }, function () {
                 location.href = '/client_current_account/receipt/list/';

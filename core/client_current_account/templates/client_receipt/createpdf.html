@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <style>
+            .img-receipt {
+                width: 80px;
+                text-align: left;
+                margin: 0 auto;
+            }
+
+            .head {
+                text-align: left;
+                text-transform: uppercase;
+            }
+
+            #receipt thead tr th {
+                text-align: left;
+                border-bottom: 1px solid black;
+                border-top: 1px solid black;
+                padding: 4px;
+            }
+
+            #receipt tbody tr th,
+            #receipt tbody tr td {
+                padding: 4px;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .text-right {
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="{{ company.get_photo_image_ticket_url }}" class="img-receipt" alt="">
+        <h4>RECIBO</h4>
+        <table id="receipt">
+            <tbody>
+                <tr>
+                    <td style="width: 60%; text-align: left;">
+                        <b>{{ company.name|upper }}</b><br>
+                        <b>Razón Social:</b> {{ company.name|upper }}<br>
+                        <b>Domicilio Comercial:</b> {{ company.address }} - {{ company.residence_city }},
+                        {{ company.residence_city.province.name }}, {{ company.residence_city.province.country.name }}<br>
+                    </td>
+                    <td style="width: 40%; text-align: left;">
+                        <b>Recibo Nº:</b> {{ receipt }}<br>
+                        <b>Fecha:</b> {{ receipt.date_joined|date:'d/m/Y' }}<br>
+                        <b>Punto de Cobro:</b> {{ receipt.center }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 10px;">
+                        <b>Cliente:</b> {{ receipt.client }}<br>
+                        <b>Domicilio:</b>
+                        {% if receipt.client.residence_city %}
+                            {{ receipt.client.address }} - {{ receipt.client.residence_city }},
+                            {{ receipt.client.residence_city.province.name }},
+                            {{ receipt.client.residence_city.province.country.name }}
+                        {% else %}
+                            {{ receipt.client.address|default:"-" }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table id="receipt_detail">
+            <thead>
+                <tr>
+                    <th style="width: 60%;">COMPROBANTE</th>
+                    <th style="width: 40%; text-align: right;">IMPORTE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in receipt.clientreceiptdetail_set.all %}
+                <tr>
+                    <td>{{ detail.ticket_receipt }}</td>
+                    <td class="text-right">$ {{ detail.total }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">Recibo a cuenta</td>
+                </tr>
+                {% endfor %}
+                <tr style="border-top: 1px solid black; padding-top: 4px;">
+                    <td><b>TOTAL COBRADO</b></td>
+                    <td class="text-right"><b>$ {{ receipt.total }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

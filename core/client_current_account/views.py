@@ -1,19 +1,23 @@
 import json
+import os
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
-from django.http import JsonResponse
-from django.views.generic import CreateView
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, View
 
 from django_filters.views import FilterView
-from .filters import ClientCurrentAccountFilter, ClientReceiptFilter
+from xhtml2pdf import pisa
 
-from .models import ClientCurrentAccount, ClientReceipt, ClientReceiptDetail
+from .filters import ClientCurrentAccountFilter, ClientReceiptFilter
 from .forms import ClientReceiptForm
+from .models import ClientCurrentAccount, ClientReceipt, ClientReceiptDetail
 from core.sale.models import Client
 from core.setting.models import Company
 
@@ -197,3 +201,42 @@ class ClientReceiptCreateView(LoginRequiredMixin, CreateView):
         context['dashboard_url'] = reverse_lazy('login:dashboard')
         context['action'] = 'add'
         return context
+
+
+class ClientReceiptCreatePDFView(LoginRequiredMixin, View):
+    """
+    Generates PDF for a client receipt.
+    """
+
+    def link_callback(self, uri, rel):
+        """Serves static and media files for PDF generation."""
+        sUrl = settings.STATIC_URL
+        sRoot = settings.STATIC_ROOT
+        mUrl = settings.MEDIA_URL
+        mRoot = settings.MEDIA_ROOT
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+        if not os.path.isfile(path):
+            raise Exception('media URI must start with %s or %s' % (sUrl, mUrl))
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('client_receipt/createpdf.html')
+            receipt = ClientReceipt.objects.get(pk=self.kwargs['pk'])
+            context = {
+                'receipt': receipt,
+                'company': Company.objects.get(pk=1)
+            }
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="recibo_{}.pdf"'.format(receipt)
+            pisa.CreatePDF(html, dest=response, link_callback=self.link_callback)
+            return response
+        except Exception as e:
+            print(str(e))
+        return HttpResponseRedirect(reverse_lazy('client_current_account:client_receipt_list'))
