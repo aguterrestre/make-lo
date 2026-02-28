@@ -30,10 +30,6 @@ class ClientReportForm(Form):
 
 
 class ProductReportForm(Form):
-    date_expiration_range = CharField(widget=TextInput(attrs={
-        'class': 'form-control',
-        'autocomplete': 'off'
-    }))
     product = ChoiceField(widget=Select(attrs={
         'class': 'form-control select2',
         'style': 'width: 100%',
@@ -42,12 +38,6 @@ class ProductReportForm(Form):
     CHOICES_STOCK = [('0', 'Todo el stock'), ('1', 'Productos sin stock'), ('2', 'Productos con stock'),
                      ('3', 'Productos con bajo stock')]
     stock = ChoiceField(choices=CHOICES_STOCK, widget=Select(attrs={
-        'class': 'form-control select2',
-        'style': 'width: 100%',
-        'autocomplete': 'off'
-    }))
-    CHOICES_EXPIRATION = [('0', 'Todo el stock'), ('1', 'Productos por vencer'), ('2', 'Productos vencidos')]
-    expiration = ChoiceField(choices=CHOICES_EXPIRATION, widget=Select(attrs={
         'class': 'form-control select2',
         'style': 'width: 100%',
         'autocomplete': 'off'

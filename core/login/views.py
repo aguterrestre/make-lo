@@ -86,19 +86,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Card de ingresos en el día de hoy
         ticket_today = Ticket.objects.filter(date_creation__date=datetime.now())
         context['card_money_ticket_num'] = ticket_today.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
-        # Card de productos por vencer
-        date_now = datetime.now().date()
-        product_to_expire = 0
-        for p in Product.objects.filter(date_expiration__isnull=False):
-            date_exp = p.date_expiration
-            to_expiration = (date_exp - date_now).days
-            if to_expiration <= 3 and to_expiration >= 0:  # aviso hasta 3 días antes del vencimiento
-                product_to_expire += 1
-        context['card_product_to_expire_num'] = product_to_expire
-        context['card_product_to_expire_url'] = reverse_lazy('report:product_report', args=[2])
-        # Card de productos vencidos
-        context['card_product_expire_num'] = Product.objects.filter(date_expiration__lt=datetime.now())
-        context['card_product_expire_url'] = reverse_lazy('report:product_report', args=[3])
         # Card de nuevos proveedores
         context['card_news_provider_num'] = Provider.objects.filter(date_creation__date=datetime.now())
         context['card_news_provider_url'] = reverse_lazy('report:provider_report')

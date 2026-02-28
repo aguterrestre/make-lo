@@ -35,30 +35,16 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label>Filtro por fecha de vencimiento:</label>
-                        {{ form.date_expiration_range }}
-                    </div>
-                </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label>Filtro por nombre:</label>
                         {{ form.product }}
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label>Filtro por stock:</label>
                         {{ form.stock }}
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label>Filtro por vencimiento:</label>
-                        {{ form.expiration }}
                     </div>
                 </div>
             </div>
@@ -67,10 +53,9 @@
                 <thead>
                 <tr>
                     <th scope="col">Código</th>
-                    <th scope="col">barcode</th>
+                    <th scope="col">Código de barra</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Stock</th>
-                    <th scope="col">Fec. Venc.</th>
                     <th scope="col">Precio</th>
                     <th scope="col">Unid. Med.</th>
                 </tr>

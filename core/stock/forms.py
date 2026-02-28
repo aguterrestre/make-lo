@@ -40,16 +40,8 @@ class ProductForm(ModelForm):
                 }
             ),
             'stock': NumberInput(),
-            'date_expiration': DateInput(format='%Y-%m-%d',
-                                         # attrs={
-                                         #         'class': 'datetimepicker-input',
-                                         #        'id': 'date_expiration',
-                                         #        'data-target': '#date_expiration',
-                                         #        'data-toggle': 'datetimepicker'
-                                         # }
-                                         ),
             'unit': Select(),
         }
         exclude = ['sale_price', 'exception', 'discount',
                    'user_creation', 'date_creation', 'user_update',
-                   'date_update', 'category', 'tax']
+                   'date_update', 'category', 'tax', 'date_expiration']

@@ -29,16 +29,10 @@ class ReportProductView(LoginRequiredMixin, TemplateView):
             if action == 'search_report':
                 data = []
                 # Obtengo los filtros elegidos en el template
-                start_date = request.POST.get('start_date', '')
-                end_date = request.POST.get('end_date', '')
                 product = request.POST.get('product', '')
                 stock = int(request.POST.get('stock', ''))
-                expiration = int(request.POST.get('expiration', ''))
                 # Hago la busqueda de todos los product
                 search = Product.objects.all()
-                # Filtro la busqueda de product por fecha de vencimiento
-                if len(start_date) and len(end_date):
-                    search = search.filter(date_expiration__range=[start_date, end_date])
                 # Filtro la busqueda de product por product elegido
                 if len(product):
                     search = search.filter(id=product)
@@ -49,17 +43,6 @@ class ReportProductView(LoginRequiredMixin, TemplateView):
                     search = search.filter(stock__gt=0)
                 elif stock == 3:  # Product con bajo stock
                     search = search.filter(stock__lte=3, stock__gt=0)
-                # Filtro la busqueda de product por expiration
-                if expiration == 1:  # Product por vencer
-                    date_now, product_to_expire = datetime.now().date(), []
-                    for p in Product.objects.filter(date_expiration__isnull=False):
-                        date_exp = p.date_expiration
-                        to_expiration = (date_exp - date_now).days
-                        if to_expiration <= 3 and to_expiration >= 0:  # 3 días antes del vencimiento
-                            product_to_expire.append(p.id)
-                    search = search.filter(id__in=product_to_expire)
-                elif expiration == 2:  # Product vencidos
-                    search = search.filter(date_expiration__lt=datetime.now())
                 for s in search:
                     data.append(s.toJSON())
             elif action == 'search_product':
