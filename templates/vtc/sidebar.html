@@ -34,8 +34,6 @@
                       active
                     {% elif request.resolver_match.url_name == 'ticket_create' %}
                       active
-                    {% elif request.resolver_match.url_name == 'ticket_report' %}
-                      active
                     {% endif %}">
                       <i class="nav-icon fas fa-store-alt"></i>
                       <p>
@@ -103,8 +101,6 @@
                       active
                     {% elif request.resolver_match.url_name == 'product_delete' %}
                       active
-                    {% elif request.resolver_match.url_name == 'product_report' %}
-                      active
                     {% endif %}">
                       <i class="nav-icon fas fa-boxes"></i>
                       <p>
@@ -122,8 +118,6 @@
                       active
                     {% elif request.resolver_match.url_name == 'provider_delete' %}
                       active
-                    {% elif request.resolver_match.url_name == 'provider_report' %}
-                      active
                     {% endif %}">
                       <i class="nav-icon fas fa-user-friends"></i>
                       <p>
@@ -136,8 +130,6 @@
                     {% if request.resolver_match.url_name == 'invoice_list' %}
                       active
                     {% elif request.resolver_match.url_name == 'invoice_create' %}
-                      active
-                    {% elif request.resolver_match.url_name == 'invoice_report' %}
                       active
                     {% endif %}">
                       <i class="nav-icon fas fa-shopping-cart"></i>
@@ -154,6 +146,17 @@
                       <i class="nav-icon fas fa-cash-register"></i>
                       <p>
                           Dinero
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="{% url 'report:report_dashboard' %}" class="nav-link
+                    {% if request.resolver_match.namespace == 'report' %}
+                      active
+                    {% endif %}">
+                      <i class="nav-icon fas fa-chart-bar"></i>
+                      <p>
+                          Reportes
                       </p>
                   </a>
               </li>

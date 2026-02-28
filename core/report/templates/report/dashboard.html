@@ -1,0 +1,36 @@
+{% extends 'vtc/body.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-bar"></i> Reportes del Sistema</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Selecciona el reporte que deseas consultar</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for report in reports %}
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="small-box {{ report.color }}">
+            <div class="inner">
+                <h4>{{ report.title }}</h4>
+                <p>{{ report.description }}</p>
+            </div>
+            <div class="icon">
+                <i class="{{ report.icon }}"></i>
+            </div>
+            <a href="{{ report.url }}" class="small-box-footer">
+                Acceder al reporte <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
