@@ -169,15 +169,57 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
                         receipt_type = tickets['voucher_type']
                         concept = 3  # productos y servicios
                         ticket_client = Client.objects.get(id=(tickets['client']))
-                        document_type = ticket_client.document_type.id
-                        document_number = ticket_client.document
                         currency = 1  # 'PES'
+                        total_amount = float(tickets['total'])
+                        letter = tickets['letter'].upper()
+                        
+                        # Verificar si el cliente tiene documento válido (no vacío, no "0")
+                        has_valid_document = (ticket_client.document and 
+                                            ticket_client.document.strip() != '' and 
+                                            ticket_client.document.strip() != '0' and
+                                            ticket_client.document_type)
+                        
+                        # Determinar document_type y document_number según letra y monto
+                        if letter == 'A':
+                            # Factura A: SIEMPRE usa los datos del cliente
+                            document_type = ticket_client.document_type.code
+                            document_number = int(ticket_client.document)
+                        elif letter in ['B', 'C']:
+                            # Facturas B y C: depende del monto
+                            if total_amount >= 10000000:
+                                # Monto >= 10M: usar documento del cliente si tiene, sino 99/0
+                                if has_valid_document:
+                                    document_type = ticket_client.document_type.code
+                                    document_number = int(ticket_client.document)
+                                else:
+                                    document_type = 99
+                                    document_number = 0
+                            else:
+                                # Monto < 10M: usar documento si tiene, sino 99/0
+                                if has_valid_document:
+                                    document_type = ticket_client.document_type.code
+                                    document_number = int(ticket_client.document)
+                                else:
+                                    document_type = 99  # Sin identificar / Consumidor Final
+                                    document_number = 0
+                        else:
+                            # Otras letras: usar documento del cliente por defecto
+                            if has_valid_document:
+                                document_type = ticket_client.document_type.code
+                                document_number = int(ticket_client.document)
+                            else:
+                                document_type = 99
+                                document_number = 0
+                        
+                        # Obtener el objeto DocumentType por su código
+                        doc_type_obj = django_afip.DocumentType.objects.get(code=document_type)
+                        
                         # Generamos instancia de un comprobante
                         receipt = django_afip.Receipt(
                             point_of_sales=django_afip.PointOfSales(id=center.id),
                             receipt_type=django_afip.ReceiptType(id=receipt_type),
                             concept=django_afip.ConceptType(id=concept),
-                            document_type=django_afip.DocumentType(id=document_type),
+                            document_type=doc_type_obj,
                             document_number=document_number,
                             # receipt_number=5,
                             issued_date=tickets['date_joined'],
