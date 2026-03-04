@@ -91,8 +91,19 @@
                         </li>
                   </ul>
               </li>
-              <li class="nav-item">
-                  <a href="{% url 'stock:product_list' %}" class="nav-link
+              <li class="nav-item has-treeview
+                  {% if request.resolver_match.url_name == 'product_list' %}
+                      menu-open
+                  {% elif request.resolver_match.url_name == 'product_create' %}
+                      menu-open
+                  {% elif request.resolver_match.url_name == 'product_update' %}
+                      menu-open
+                  {% elif request.resolver_match.url_name == 'product_delete' %}
+                      menu-open
+                  {% elif request.resolver_match.url_name == 'product_bulk_price_update' %}
+                      menu-open
+                  {% endif %}">
+                  <a href="#" class="nav-link
                     {% if request.resolver_match.url_name == 'product_list' %}
                       active
                     {% elif request.resolver_match.url_name == 'product_create' %}
@@ -101,12 +112,38 @@
                       active
                     {% elif request.resolver_match.url_name == 'product_delete' %}
                       active
+                    {% elif request.resolver_match.url_name == 'product_bulk_price_update' %}
+                      active
                     {% endif %}">
                       <i class="nav-icon fas fa-boxes"></i>
-                      <p>
-                          Productos
-                      </p>
+                      <p>Productos</p>
                   </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{% url 'stock:product_list' %}" class="nav-link
+                        {% if request.resolver_match.url_name == 'product_list' %}
+                          active
+                        {% elif request.resolver_match.url_name == 'product_create' %}
+                          active
+                        {% elif request.resolver_match.url_name == 'product_update' %}
+                          active
+                        {% elif request.resolver_match.url_name == 'product_delete' %}
+                          active
+                        {% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Padrón Productos</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'stock:product_bulk_price_update' %}" class="nav-link
+                        {% if request.resolver_match.url_name == 'product_bulk_price_update' %}
+                          active
+                        {% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Precios</p>
+                      </a>
+                    </li>
+                  </ul>
               </li>
               <li class="nav-item">
                   <a href="{% url 'purchase:provider_list' %}" class="nav-link
